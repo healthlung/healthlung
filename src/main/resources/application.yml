@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/health_lung?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: 123456
+  jackson:
+    default-property-inclusion: non_null
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/xml/*.xml
+  type-aliases-package: com.edu.neu.zady.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+  global-config:
+    db-config:
+      id-type: auto
+      table-underline: true
+      update-strategy: not_null
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      logic-delete-field: flag
+
+healthlung:
+  default-page-size: 10
+  video-temp-dir: D:\\data\\healthlungvideo\\
+  default-province: 北京
+  default-city: 朝阳区
+
+
