@@ -33,6 +33,7 @@ public class UserController {
 
     @GetMapping("/user/{userId}")
     @ApiOperation(value = "根据用户ID返回用户信息")
+    //todo: 不要返回password
     public User getUser(@PathVariable Integer userId){
         User user =  userService.getById(userId);
         if(user == null){
@@ -53,10 +54,10 @@ public class UserController {
     }
 
 
-    @ApiOperation(value = "检测邮箱是否被使用了")
+    @ApiOperation(value = "检测邮箱是否被使用了，使用了返回false")
     @GetMapping("/user/email/{email}")
     public Boolean existByEmail(@PathVariable String email){
-        return userService.existByEmail(email);
+        return !userService.existByEmail(email);
     }
 
     @PutMapping("/user")
