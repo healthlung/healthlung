@@ -1,13 +1,11 @@
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/health_lung?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
-    username: root
-    password: 123456
+  profiles:
+    active: dev
   servlet:
     multipart:
       max-file-size: 500MB
       max-request-size: 1000MB
+
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/xml/*.xml
@@ -26,8 +24,10 @@ mybatis-plus:
 
 healthlung:
   default-page-size: 10
-  video-temp-dir: D:\\data\\healthlungvideo\\
   default-province: 北京
   default-city: 朝阳区
 
-
+server:
+  port: 8080
+  servlet:
+    context-path: /api/

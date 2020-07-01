@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.edu.neu</groupId>
     <artifactId>healthlung</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.1</version>
     <name>healthlung</name>
     <description>AI lung platform</description>
 
