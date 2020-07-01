@@ -1,5 +1,6 @@
 package com.edu.neu.healthlung.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
 
@@ -8,7 +9,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.util.List;
 
+import com.edu.neu.healthlung.util.LungNodeListTypeHandler;
 import com.edu.neu.healthlung.util.StringListTypeHandler;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -25,6 +29,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="问诊记录")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class InterviewRecord implements Serializable {
 
     private static final long serialVersionUID=1L;
@@ -65,13 +70,15 @@ public class InterviewRecord implements Serializable {
     private Integer countryRecommendedDoctorId;
 
     @ApiModelProperty(value = "医院ID")
+    @TableField(fill = FieldFill.INSERT)
     private Date createDate;
 
-    //todo: 写一个类型转换器，这里存到数据库存成json格式的字符串
-    @TableField(exist = false)
+    @JsonIgnore
+    @TableField(value = "lung_nodes", typeHandler = LungNodeListTypeHandler.class)
     private List<LungNode> lungNodes;
 
     //候选医生列表
+    @JsonIgnore
     @TableField(exist = false)
     private List<List<Doctor>> candidateDoctors;
 

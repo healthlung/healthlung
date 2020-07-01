@@ -34,7 +34,7 @@ public class MedicareController {
     private MedicareService medicareService;
 
     @GetMapping("/medicare/{medicareId}")
-    @ApiOperation(value = "根据药品ID返回药品信息")
+    @ApiOperation(value = "根据医保ID返回医保信息")
     public Medicare get(@PathVariable Integer medicareId){
         Medicare item =  medicareService.getById(medicareId);
         if(item == null){

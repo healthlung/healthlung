@@ -4,8 +4,6 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/health_lung?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
     username: root
     password: 123456
-  jackson:
-    default-property-inclusion: non_null
   servlet:
     multipart:
       max-file-size: 500MB

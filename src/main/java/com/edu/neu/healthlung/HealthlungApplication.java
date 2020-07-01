@@ -5,6 +5,8 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+//todo: 打乱数据库的显示顺序，不然healthTips第一篇全是太极拳
+//todo: 健康百科的整体搜索功能
 @MapperScan(basePackages = {"com.edu.neu.healthlung.mapper"}, annotationClass = Mapper.class)
 @SpringBootApplication
 public class HealthlungApplication {

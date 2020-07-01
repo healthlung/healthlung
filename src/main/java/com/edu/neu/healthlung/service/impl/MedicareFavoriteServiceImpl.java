@@ -1,7 +1,9 @@
 package com.edu.neu.healthlung.service.impl;
 
+import com.edu.neu.healthlung.entity.Medicare;
 import com.edu.neu.healthlung.entity.MedicareFavorite;
 import com.edu.neu.healthlung.exception.BadDataException;
+import com.edu.neu.healthlung.exception.DefaultException;
 import com.edu.neu.healthlung.exception.NoAuthException;
 import com.edu.neu.healthlung.exception.NotFoundException;
 import com.edu.neu.healthlung.mapper.MedicareFavoriteMapper;
@@ -34,25 +36,50 @@ public class MedicareFavoriteServiceImpl extends ServiceImpl<MedicareFavoriteMap
     @Override
     public boolean save(MedicareFavorite entity) {
 
-        if(medicareService.getById(entity.getMedicareId()) == null){
+        Medicare medicare;
+
+        if((medicare = medicareService.getById(entity.getMedicareId())) == null){
             throw new BadDataException("给定医保不存在");
         }
 
         if(userService.getById(entity.getUserId()) == null){
             throw new BadDataException("给定用户不存在");
         }
+
+        medicare.setFavoriteNumber(medicare.getFavoriteNumber() + 1);
+
+        if(!medicareService.save(medicare)){
+            throw new DefaultException("收藏医保失败");
+        }
+
         return super.save(entity);
     }
 
     @Override
     public boolean removeByIdWithCheck(Integer itemId) {
+
         MedicareFavorite dbItem = super.getById(itemId);
+
         if(dbItem == null){
-            throw new NotFoundException("给定收藏不存在");
+            throw new NotFoundException("给定医保收藏不存在");
         }
+
         if(!dbItem.getUserId().equals(ParamHolder.getCurrentUserId())){
-            throw new NoAuthException("无权删除其他用户的收藏");
+            throw new NoAuthException("无权删除其他用户的医保收藏");
         }
+
+        Medicare medicare;
+
+        if((medicare = medicareService.getById(dbItem.getMedicareId())) == null){
+            throw new BadDataException("给定医保不存在");
+        }
+
+        medicare.setFavoriteNumber(medicare.getFavoriteNumber() - 1);
+
+        if(!medicareService.save(medicare)){
+            throw new DefaultException("收藏医保失败");
+        }
+
         return super.removeById(itemId);
     }
 }

@@ -3,6 +3,8 @@ package com.edu.neu.healthlung.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,6 +23,7 @@ import javax.validation.constraints.*;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="健康档案")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class HealthRecord implements Serializable {
 
     private static final long serialVersionUID=1L;
@@ -41,7 +44,8 @@ public class HealthRecord implements Serializable {
     @ApiModelProperty(value = "性别")
     private String sex;
 
-    @Size(min = 1, max = 200, message = "年龄必须在1到200岁之间")
+    @Min(value = 1, message = "年龄必须大于1岁")
+    @Max(value = 200, message = "年龄必须小于200岁")
     @ApiModelProperty(value = "年龄")
     private Integer age;
 
@@ -107,7 +111,7 @@ public class HealthRecord implements Serializable {
 
     @NotNull(message = "反复肺部感染字段不能为空")
     @ApiModelProperty(value = "反复肺部感染")
-    private String recurrentLungInfection;
+    private Boolean recurrentLungInfection;
 
     @ApiModelProperty(value = "居住省份")
     private String province;

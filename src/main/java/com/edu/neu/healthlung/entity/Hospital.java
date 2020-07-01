@@ -3,6 +3,8 @@ package com.edu.neu.healthlung.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -19,6 +21,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="医院")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Hospital implements Serializable {
 
     private static final long serialVersionUID=1L;

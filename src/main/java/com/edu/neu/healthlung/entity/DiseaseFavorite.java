@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import java.util.Date;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,6 +25,7 @@ import javax.validation.constraints.Null;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="DiseaseFavorite")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DiseaseFavorite implements Serializable {
 
     private static final long serialVersionUID=1L;

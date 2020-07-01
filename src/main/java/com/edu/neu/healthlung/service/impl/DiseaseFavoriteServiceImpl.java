@@ -1,8 +1,11 @@
 package com.edu.neu.healthlung.service.impl;
 
+import com.edu.neu.healthlung.entity.Disease;
 import com.edu.neu.healthlung.entity.DiseaseFavorite;
 import com.edu.neu.healthlung.entity.DrugFavorite;
+import com.edu.neu.healthlung.entity.HealthTip;
 import com.edu.neu.healthlung.exception.BadDataException;
+import com.edu.neu.healthlung.exception.DefaultException;
 import com.edu.neu.healthlung.exception.NoAuthException;
 import com.edu.neu.healthlung.exception.NotFoundException;
 import com.edu.neu.healthlung.mapper.DiseaseFavoriteMapper;
@@ -36,25 +39,50 @@ public class DiseaseFavoriteServiceImpl extends ServiceImpl<DiseaseFavoriteMappe
     @Override
     public boolean save(DiseaseFavorite diseaseFavorite) {
 
-        if(diseaseService.getById(diseaseFavorite.getDiseaseId()) == null){
+        Disease disease;
+
+        if((disease = diseaseService.getById(diseaseFavorite.getDiseaseId())) == null){
             throw new BadDataException("给定疾病不存在");
         }
 
         if(userService.getById(diseaseFavorite.getUserId()) == null){
             throw new BadDataException("给定用户不存在");
         }
+
+        disease.setFavoriteNumber(disease.getFavoriteNumber() + 1);
+
+        if(!diseaseService.save(disease)){
+            throw new DefaultException("收藏疾病失败");
+        }
+
         return super.save(diseaseFavorite);
     }
 
     @Override
     public boolean removeByIdWithCheck(Integer itemId) {
+
         DiseaseFavorite dbItem = super.getById(itemId);
+
         if(dbItem == null){
-            throw new NotFoundException("给定收藏不存在");
+            throw new NotFoundException("给定疾病收藏不存在");
         }
+
         if(!dbItem.getUserId().equals(ParamHolder.getCurrentUserId())){
-            throw new NoAuthException("无权删除其他用户的收藏");
+            throw new NoAuthException("无权删除其他用户的疾病收藏");
         }
+
+        Disease disease;
+
+        if((disease = diseaseService.getById(dbItem.getDiseaseId())) == null){
+            throw new BadDataException("给定贴士不存在");
+        }
+
+        disease.setFavoriteNumber(disease.getFavoriteNumber() - 1);
+
+        if(!diseaseService.save(disease)){
+            throw new DefaultException("取消收藏失败");
+        }
+
         return super.removeById(itemId);
     }
 }

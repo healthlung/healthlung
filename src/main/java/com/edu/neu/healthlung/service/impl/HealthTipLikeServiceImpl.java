@@ -1,7 +1,9 @@
 package com.edu.neu.healthlung.service.impl;
 
+import com.edu.neu.healthlung.entity.HealthTip;
 import com.edu.neu.healthlung.entity.HealthTipLike;
 import com.edu.neu.healthlung.exception.BadDataException;
+import com.edu.neu.healthlung.exception.DefaultException;
 import com.edu.neu.healthlung.mapper.HealthTipLikeMapper;
 import com.edu.neu.healthlung.service.HealthTipLikeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -30,13 +32,22 @@ public class HealthTipLikeServiceImpl extends ServiceImpl<HealthTipLikeMapper, H
     @Override
     public boolean save(HealthTipLike entity) {
 
-        if(healthTipService.getById(entity.getHealthTipId()) == null){
+        HealthTip healthTip;
+
+        if((healthTip = healthTipService.getById(entity.getHealthTipId())) == null){
             throw new BadDataException("给定贴士不存在");
         }
 
         if(userService.getById(entity.getUserId()) == null){
             throw new BadDataException("给定用户不存在");
         }
+
+        healthTip.setLikeNumber(healthTip.getLikeNumber() + 1);
+
+        if(!healthTipService.save(healthTip)){
+            throw new DefaultException("点赞失败");
+        }
+
         return super.save(entity);
     }
 }
