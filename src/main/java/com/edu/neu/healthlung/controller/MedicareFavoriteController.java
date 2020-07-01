@@ -40,9 +40,11 @@ public class MedicareFavoriteController {
     @ApiOperation(value = "返回用户收藏的医保政策，每页10个")
     @Auth(needToken = true)
     public List<MedicareFavorite> gets(@PathVariable Integer pageNum){
-        LambdaQueryWrapper<MedicareFavorite> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(MedicareFavorite::getUserId, ParamHolder.getCurrentUserId());
-        return favoriteService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
+        Integer userId = ParamHolder.getCurrentUserId();
+        return favoriteService.listByUserId(userId, pageNum);
+//        LambdaQueryWrapper<MedicareFavorite> queryWrapper = new LambdaQueryWrapper<>();
+//        queryWrapper.eq(MedicareFavorite::getUserId, ParamHolder.getCurrentUserId());
+//        return favoriteService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
     }
 
     @PostMapping("/favorite/medicare/{itemId}")

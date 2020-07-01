@@ -1,5 +1,7 @@
 package com.edu.neu.healthlung.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.edu.neu.healthlung.entity.Disease;
 import com.edu.neu.healthlung.entity.DiseaseFavorite;
 import com.edu.neu.healthlung.entity.DrugFavorite;
@@ -15,9 +17,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.edu.neu.healthlung.service.DiseaseService;
 import com.edu.neu.healthlung.service.UserService;
 import com.edu.neu.healthlung.util.ParamHolder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -29,6 +33,9 @@ import javax.annotation.Resource;
  */
 @Service
 public class DiseaseFavoriteServiceImpl extends ServiceImpl<DiseaseFavoriteMapper, DiseaseFavorite> implements DiseaseFavoriteService {
+
+    @Value("${healthlung.default-page-size}")
+    private Integer defaultPageSize;
 
     @Resource
     DiseaseService diseaseService;
@@ -84,5 +91,22 @@ public class DiseaseFavoriteServiceImpl extends ServiceImpl<DiseaseFavoriteMappe
         }
 
         return super.removeById(itemId);
+    }
+
+    @Override
+    public List<DiseaseFavorite> listByUserId(Integer userId, Integer pageNum) {
+
+        LambdaQueryWrapper<DiseaseFavorite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(DiseaseFavorite::getUserId, ParamHolder.getCurrentUserId());
+
+        List<DiseaseFavorite> diseaseFavorites = super.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
+
+        for(DiseaseFavorite item : diseaseFavorites){
+            Integer subId = item.getDiseaseId();
+            Disease sub = diseaseService.getById(subId);
+            item.setDisease(sub);
+        }
+
+        return diseaseFavorites;
     }
 }

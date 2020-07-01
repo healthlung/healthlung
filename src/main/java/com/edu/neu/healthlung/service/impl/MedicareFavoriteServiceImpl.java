@@ -1,5 +1,9 @@
 package com.edu.neu.healthlung.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.edu.neu.healthlung.entity.Disease;
+import com.edu.neu.healthlung.entity.DiseaseFavorite;
 import com.edu.neu.healthlung.entity.Medicare;
 import com.edu.neu.healthlung.entity.MedicareFavorite;
 import com.edu.neu.healthlung.exception.BadDataException;
@@ -12,9 +16,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.edu.neu.healthlung.service.MedicareService;
 import com.edu.neu.healthlung.service.UserService;
 import com.edu.neu.healthlung.util.ParamHolder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -32,6 +38,9 @@ public class MedicareFavoriteServiceImpl extends ServiceImpl<MedicareFavoriteMap
 
     @Resource
     UserService userService;
+
+    @Value("${healthlung.default-page-size}")
+    private Integer defaultPageSize;
 
     @Override
     public boolean save(MedicareFavorite entity) {
@@ -81,5 +90,21 @@ public class MedicareFavoriteServiceImpl extends ServiceImpl<MedicareFavoriteMap
         }
 
         return super.removeById(itemId);
+    }
+
+    @Override
+    public List<MedicareFavorite> listByUserId(Integer userId, Integer pageNum) {
+
+        LambdaQueryWrapper<MedicareFavorite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(MedicareFavorite::getUserId, ParamHolder.getCurrentUserId());
+
+        List<MedicareFavorite> favoriteList = super.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
+
+        for(MedicareFavorite item : favoriteList){
+            Integer subId = item.getMedicareId();
+            Medicare sub = medicareService.getById(subId);
+            item.setMedicare(sub);
+        }
+        return null;
     }
 }

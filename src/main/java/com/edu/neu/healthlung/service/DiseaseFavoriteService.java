@@ -3,6 +3,8 @@ package com.edu.neu.healthlung.service;
 import com.edu.neu.healthlung.entity.DiseaseFavorite;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -14,4 +16,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface DiseaseFavoriteService extends IService<DiseaseFavorite> {
 
     boolean removeByIdWithCheck(Integer itemId);
+
+    List<DiseaseFavorite> listByUserId(Integer userId, Integer pageNum);
 }

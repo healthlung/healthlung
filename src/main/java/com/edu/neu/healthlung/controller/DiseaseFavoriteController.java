@@ -37,9 +37,8 @@ public class DiseaseFavoriteController {
     @ApiOperation(value = "返回用户收藏的疾病，每页10个")
     @Auth(needToken = true)
     public List<DiseaseFavorite> gets(@PathVariable Integer pageNum){
-        LambdaQueryWrapper<DiseaseFavorite> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(DiseaseFavorite::getUserId, ParamHolder.getCurrentUserId());
-        return favoriteService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
+        Integer userId = ParamHolder.getCurrentUserId();
+        return favoriteService.listByUserId(userId, pageNum);
     }
 
     @PostMapping("/favorite/disease/{diseaseId}")

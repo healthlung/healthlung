@@ -27,6 +27,7 @@ import java.util.List;
  */
 @RestController
 public class HealthTipFavoriteController {
+
     @Value("${healthlung.default-page-size}")
     private Integer defaultPageSize;
 
@@ -37,9 +38,8 @@ public class HealthTipFavoriteController {
     @ApiOperation(value = "返回用户收藏的贴士，每页10个")
     @Auth(needToken = true)
     public List<HealthTipFavorite> gets(@PathVariable Integer pageNum){
-        LambdaQueryWrapper<HealthTipFavorite> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(HealthTipFavorite::getUserId, ParamHolder.getCurrentUserId());
-        return favoriteService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
+        Integer userId = ParamHolder.getCurrentUserId();
+        return favoriteService.listByUserId(userId, pageNum);
     }
 
     @PostMapping("/favorite/healthTip/{itemId}")

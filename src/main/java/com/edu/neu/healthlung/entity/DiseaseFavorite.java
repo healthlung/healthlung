@@ -46,6 +46,9 @@ public class DiseaseFavorite implements Serializable {
     @TableField(fill = FieldFill.INSERT)
     private Date createDate;
 
+    @TableField(exist=false)
+    private Disease disease;
+
     @ApiModelProperty(value = "懒惰删除")
     @Null
     @TableLogic

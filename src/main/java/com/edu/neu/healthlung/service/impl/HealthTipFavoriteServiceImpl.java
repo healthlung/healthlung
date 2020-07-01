@@ -1,5 +1,9 @@
 package com.edu.neu.healthlung.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.edu.neu.healthlung.entity.Drug;
+import com.edu.neu.healthlung.entity.DrugFavorite;
 import com.edu.neu.healthlung.entity.HealthTip;
 import com.edu.neu.healthlung.entity.HealthTipFavorite;
 import com.edu.neu.healthlung.exception.BadDataException;
@@ -12,9 +16,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.edu.neu.healthlung.service.HealthTipService;
 import com.edu.neu.healthlung.service.UserService;
 import com.edu.neu.healthlung.util.ParamHolder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -26,11 +32,15 @@ import javax.annotation.Resource;
  */
 @Service
 public class HealthTipFavoriteServiceImpl extends ServiceImpl<HealthTipFavoriteMapper, HealthTipFavorite> implements HealthTipFavoriteService {
+
     @Resource
     HealthTipService healthTipService;
 
     @Resource
     UserService userService;
+
+    @Value("${healthlung.default-page-size}")
+    private Integer defaultPageSize;
 
     @Override
     public boolean save(HealthTipFavorite entity) {
@@ -79,5 +89,22 @@ public class HealthTipFavoriteServiceImpl extends ServiceImpl<HealthTipFavoriteM
         }
 
         return super.removeById(itemId);
+    }
+
+    @Override
+    public List<HealthTipFavorite> listByUserId(Integer userId, Integer pageNum) {
+
+        LambdaQueryWrapper<HealthTipFavorite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(HealthTipFavorite::getUserId, ParamHolder.getCurrentUserId());
+
+        List<HealthTipFavorite> favoriteList =  super.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
+
+        for(HealthTipFavorite item : favoriteList){
+            Integer subId = item.getHealthTipId();
+            HealthTip sub = healthTipService.getById(subId);
+            item.setHealthTip(sub);
+        }
+
+        return favoriteList;
     }
 }

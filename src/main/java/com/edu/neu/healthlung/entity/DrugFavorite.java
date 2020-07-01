@@ -46,6 +46,9 @@ public class DrugFavorite implements Serializable {
     @ApiModelProperty(value = "用户ID")
     private Integer userId;
 
+    @TableField(exist = false)
+    private Drug drug;
+
     @Null
     @TableLogic
     private Boolean flag;

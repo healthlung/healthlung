@@ -49,5 +49,8 @@ public class MedicareFavorite implements Serializable {
     @TableLogic
     private Boolean flag;
 
+    @TableField(exist = false)
+    private Medicare medicare;
+
 
 }

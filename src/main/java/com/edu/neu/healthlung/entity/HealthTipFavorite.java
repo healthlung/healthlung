@@ -44,5 +44,7 @@ public class HealthTipFavorite implements Serializable {
     @TableLogic
     private Boolean flag;
 
+    @TableField(exist = false)
+    private HealthTip healthTip;
 
 }
