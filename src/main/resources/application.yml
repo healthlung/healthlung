@@ -26,6 +26,7 @@ healthlung:
   default-page-size: 10
   default-province: 北京
   default-city: 朝阳区
+  sign: whosyourdaddy
 
 server:
   port: 8080

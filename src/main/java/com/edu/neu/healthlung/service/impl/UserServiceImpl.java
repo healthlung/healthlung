@@ -12,10 +12,13 @@ import com.edu.neu.healthlung.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.edu.neu.healthlung.util.Encoder;
 import com.edu.neu.healthlung.util.TokenGenerator;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -34,6 +37,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Resource
     private HealthRecordService healthRecordService;
+
+    @Resource
+    private TokenGenerator tokenGenerator;
+
+    @Value("${healthlung.sign}")
+    private String sign;
+
+    private static final String TABLENAME = "login";
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public Boolean existByEmail(String email) {
@@ -76,7 +90,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BadDataException("密码错误");
         }
 
-        String token = TokenGenerator.generate(user.getUserId());
+        String token =  tokenGenerator.generate(user.getUserId(), sign);
+
+
+        redisTemplate.opsForValue().set(TABLENAME + user.getUserId(), token);
+        redisTemplate.expire(TABLENAME + user.getUserId(), 1, TimeUnit.HOURS);
+
         return token;
     }
 }

@@ -3,14 +3,21 @@ package com.edu.neu.healthlung.util;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TokenGenerator {
-    public static String generate(Integer userId){
+
+
+    public String generate(Integer userId, String sign){
         JWTCreator.Builder builder = JWT.create();
 
         //token第一部分：userId
         builder.withClaim("userId", userId.toString());
 
+        //token第二部分：时间戳
+        builder.withClaim("loginTime", System.currentTimeMillis());
 
 //        //token第二部分：projectId
 //        if(projectId != null){
@@ -22,6 +29,6 @@ public class TokenGenerator {
 //            builder.withClaim("role", role);
 //        }
 
-        return  builder.sign(Algorithm.none());
+        return builder.sign(Algorithm.HMAC256(sign));
     }
 }

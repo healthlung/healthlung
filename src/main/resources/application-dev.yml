@@ -4,6 +4,19 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/health_lung?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
     username: root
     password: 123456
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+logging:
+  level:
+    com:
+      edu:
+        neu:
+          healthlung: INFO
+  file:
+    name: healthlung.log
+
 
 healthlung:
   video-temp-dir: D:\\data\\healthlungvideo\\

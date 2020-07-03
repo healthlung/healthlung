@@ -31,6 +31,9 @@ public class Medicare implements Serializable {
     @TableId(value = "medicare_id", type = IdType.AUTO)
     private Integer medicareId;
 
+    @ApiModelProperty(value = "图片地址")
+    private String imageUrl;
+
     @ApiModelProperty(value = "标题")
     private String title;
 

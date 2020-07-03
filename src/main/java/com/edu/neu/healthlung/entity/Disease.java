@@ -36,6 +36,9 @@ public class Disease implements Serializable {
     @ApiModelProperty(value = "名称")
     private String name;
 
+    @ApiModelProperty(value = "拼音")
+    private String pinyin;
+
     @ApiModelProperty(value = "别名")
     private String anotherName;
 

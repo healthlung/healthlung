@@ -33,6 +33,9 @@ public class HealthTip implements Serializable {
     @TableId(value = "health_tip_id", type = IdType.AUTO)
     private Integer healthTipId;
 
+    @ApiModelProperty(value = "图片地址")
+    private String imageUrl;
+
     @ApiModelProperty(value = "爬虫网址")
     private String spiderUrl;
 

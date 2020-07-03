@@ -4,14 +4,12 @@ package com.edu.neu.healthlung.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.edu.neu.healthlung.entity.Disease;
-import com.edu.neu.healthlung.entity.User;
 import com.edu.neu.healthlung.exception.NotFoundException;
 import com.edu.neu.healthlung.service.DiseaseService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
@@ -60,6 +58,15 @@ public class DiseaseController {
         queryWrapper.like(Disease::getName, queryStr).or().like(Disease::getSymptom, queryStr);
         Page<Disease> page = diseaseService.page(new Page<>(pageNum, defaultPageSize), queryWrapper);
         return page.getRecords();
+    }
+
+    @GetMapping("/diseases/pinyin/{pinyin}")
+    @ApiOperation(value = "根据疾病名称的拼音首字母分类检索")
+    public List<Disease> gets_(@PathVariable String pinyin){
+        LambdaQueryWrapper<Disease> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Disease::getPinyin, pinyin);
+        queryWrapper.select(Disease::getName, Disease::getDiseaseId, Disease::getPinyin);
+        return diseaseService.list(queryWrapper);
     }
 }
 

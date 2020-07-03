@@ -1,21 +1,36 @@
 package com.edu.neu.healthlung.interpretor;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.edu.neu.healthlung.annotation.Auth;
 import com.edu.neu.healthlung.exception.DefaultException;
 import com.edu.neu.healthlung.exception.NoAuthException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 鉴权拦截器
  * */
 public class AuthenticationInterceptor implements HandlerInterceptor {
+
+    @Value("${healthlung.sign}")
+    private String sign;
+
+    private static final String TABLENAME = "login";
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
 
@@ -53,6 +68,22 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
                 if(userId == null){
                     throw new NoAuthException("无法解析userId");
+                }
+
+                JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(sign)).build();
+                try {
+                    jwtVerifier.verify(token);
+                } catch (JWTVerificationException e) {
+                    throw new NoAuthException("无法解析此token");
+                }
+
+                String dbToken = (String) redisTemplate.opsForValue().get(TABLENAME + userId);
+                if(dbToken == null){
+                    throw new NoAuthException("登陆已过期，请重新登陆");
+                }
+
+                if(!dbToken.equals(token)){
+                    throw new NoAuthException("此token内容错误，请重新登陆");
                 }
 
                 //将取得的userId存到requestHeader

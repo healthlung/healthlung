@@ -9,6 +9,7 @@ import com.edu.neu.healthlung.validate.Password;
 import com.edu.neu.healthlung.validate.UpdateGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -44,11 +45,21 @@ public class User implements Serializable {
     @ApiModelProperty(value = "用户邮箱")
     private String email;
 
-    @JsonIgnore
+
     @Null(message = "此接口无法更新用户密码", groups = UpdateGroup.class)
     @Password(groups = InsertGroup.class)
     @ApiModelProperty(value = "密码")
     private String password;
+
+    @JsonIgnore
+    public String getPassword() {
+        return password;
+    }
+
+    @JsonProperty
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @NotBlank(message = "用户昵称不能为空", groups = InsertGroup.class)
     @ApiModelProperty(value = "昵称")
