@@ -43,32 +43,70 @@ public class HealthTipController {
     }
 
     @GetMapping("/healthTips/page/{pageNum}/")
-    @ApiOperation(value = "返回贴士列表每页10个")
+    @ApiOperation(value = "返回贴士列表每页10个, 按照时间排序")
     public List<HealthTip> gets(@PathVariable Integer pageNum){
-        return  healthTipService.page(new Page<>(pageNum, defaultPageSize)).getRecords();
+        LambdaQueryWrapper<HealthTip> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(HealthTip::getPublishDate);
+        return healthTipService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
+    }
+
+    @GetMapping("/healthTips/hot/page/{pageNum}/")
+    @ApiOperation(value = "返回贴士列表每页10个, 按照热度排序")
+    public List<HealthTip> gets__(@PathVariable Integer pageNum){
+        LambdaQueryWrapper<HealthTip> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(HealthTip::getFavoriteNumber);
+        return healthTipService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
     }
 
     @GetMapping("/healthTips/page/{pageNum}/module/{module}")
-    @ApiOperation(value = "返回对应模块下的贴士列表")
+    @ApiOperation(value = "返回对应模块下的贴士列表, 按照日期排序")
+    public List<HealthTip> gets__(@PathVariable Integer pageNum, @PathVariable String module){
+        LambdaQueryWrapper<HealthTip> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(HealthTip::getModule, module).orderByDesc(HealthTip::getPublishDate);
+        return healthTipService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
+    }
+
+    @GetMapping("/healthTips/hot/page/{pageNum}/module/{module}")
+    @ApiOperation(value = "返回对应模块下的贴士列表, 按照热度排序")
     public List<HealthTip> gets_(@PathVariable Integer pageNum, @PathVariable String module){
         LambdaQueryWrapper<HealthTip> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(HealthTip::getModule, module);
+        queryWrapper.eq(HealthTip::getModule, module).orderByDesc(HealthTip::getFavoriteNumber);
         return healthTipService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
     }
 
     @GetMapping("/healthTips/page/{pageNum}/query/{queryStr}")
-    @ApiOperation(value = "根据贴士标题和简单内容模糊搜索")
-    public List<HealthTip> gets(@PathVariable Integer pageNum, @PathVariable String queryStr){
+    @ApiOperation(value = "根据贴士标题和简单内容模糊搜索, 按照时间排序")
+    public List<HealthTip> gets___(@PathVariable Integer pageNum, @PathVariable String queryStr){
         LambdaQueryWrapper<HealthTip> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(HealthTip::getTitle, queryStr).or().like(HealthTip::getSimpleContent, queryStr);
+        queryWrapper.like(HealthTip::getTitle, queryStr).or().like(HealthTip::getSimpleContent, queryStr).orderByDesc(HealthTip::getPublishDate);
+        return healthTipService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
+    }
+
+    @GetMapping("/healthTips/hot/page/{pageNum}/query/{queryStr}")
+    @ApiOperation(value = "根据贴士标题和简单内容模糊搜索，按照热度排序")
+    public List<HealthTip> gets____(@PathVariable Integer pageNum, @PathVariable String queryStr){
+        LambdaQueryWrapper<HealthTip> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(HealthTip::getTitle, queryStr).or().like(HealthTip::getSimpleContent, queryStr).orderByDesc(HealthTip::getFavoriteNumber);
         return healthTipService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
     }
 
     @GetMapping("/healthTips/page/{pageNum}/module/{module}/query/{queryStr}")
-    @ApiOperation(value = "根据贴士标题和简单内容模糊分模块搜索")
+    @ApiOperation(value = "根据贴士标题和简单内容模糊分模块搜索，按照时间排序")
     public List<HealthTip> gets(@PathVariable Integer pageNum, @PathVariable String queryStr, @PathVariable String module){
         LambdaQueryWrapper<HealthTip> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(HealthTip::getModule, module).and(i -> i.eq(HealthTip::getTitle, queryStr).or().like(HealthTip::getSimpleContent, queryStr));
+        queryWrapper.eq(HealthTip::getModule, module)
+                .and(i -> i.eq(HealthTip::getTitle, queryStr).or().like(HealthTip::getSimpleContent, queryStr))
+                .orderByDesc(HealthTip::getPublishDate);
+        return healthTipService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
+    }
+
+    @GetMapping("/healthTips/hot/page/{pageNum}/module/{module}/query/{queryStr}")
+    @ApiOperation(value = "根据贴士标题和简单内容模糊分模块搜索，按照热度排序")
+    public List<HealthTip> gets_(@PathVariable Integer pageNum, @PathVariable String queryStr, @PathVariable String module){
+        LambdaQueryWrapper<HealthTip> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(HealthTip::getModule, module)
+                .and(i -> i.eq(HealthTip::getTitle, queryStr).or().like(HealthTip::getSimpleContent, queryStr))
+                .orderByDesc(HealthTip::getFavoriteNumber);
         return healthTipService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
     }
 

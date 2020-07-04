@@ -43,18 +43,37 @@ public class MedicareController {
         return item;
     }
 
-    @GetMapping("/medicares/page/{pageNum}/")
-    @ApiOperation(value = "返回医保政策列表每页10个")
-    public List<Medicare> gets(@PathVariable Integer pageNum){
-        Page<Medicare> page = medicareService.page(new Page<>(pageNum, defaultPageSize));
+    @GetMapping("/medicares/hot/page/{pageNum}/")
+    @ApiOperation(value = "返回医保政策列表每页10个，按照热度排序")
+    public List<Medicare> gets__(@PathVariable Integer pageNum){
+        LambdaQueryWrapper<Medicare> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Medicare::getPublishDate);
+        Page<Medicare> page = medicareService.page(new Page<>(pageNum, defaultPageSize), queryWrapper);
         return page.getRecords();
     }
 
+    @GetMapping("/medicares/page/{pageNum}/")
+    @ApiOperation(value = "返回医保政策列表每页10个，按照时间排序")
+    public List<Medicare> gets(@PathVariable Integer pageNum){
+        LambdaQueryWrapper<Medicare> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Medicare::getPublishDate);
+        Page<Medicare> page = medicareService.page(new Page<>(pageNum, defaultPageSize), queryWrapper);
+        return page.getRecords();
+    }
+
+    @GetMapping("/medicares/hot/page/{pageNum}/query/{queryStr}")
+    @ApiOperation(value = "根据标题和城市模糊搜索，按照热度排序")
+    public List<Medicare> gets_(@PathVariable Integer pageNum, @PathVariable String queryStr){
+        LambdaQueryWrapper<Medicare> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(Medicare::getTitle, queryStr).or().like(Medicare::getCity, queryStr).orderByDesc(Medicare::getFavoriteNumber);
+        return medicareService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
+    }
+
     @GetMapping("/medicares/page/{pageNum}/query/{queryStr}")
-    @ApiOperation(value = "根据标题和城市模糊搜索")
+    @ApiOperation(value = "根据标题和城市模糊搜索，按照时间排序")
     public List<Medicare> gets(@PathVariable Integer pageNum, @PathVariable String queryStr){
         LambdaQueryWrapper<Medicare> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(Medicare::getTitle, queryStr).or().like(Medicare::getCity, queryStr);
+        queryWrapper.like(Medicare::getTitle, queryStr).or().like(Medicare::getCity, queryStr).orderByDesc(Medicare::getPublishDate);
         return medicareService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
     }
 

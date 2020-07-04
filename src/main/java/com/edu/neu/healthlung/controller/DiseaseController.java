@@ -68,5 +68,15 @@ public class DiseaseController {
         queryWrapper.select(Disease::getName, Disease::getDiseaseId, Disease::getPinyin);
         return diseaseService.list(queryWrapper);
     }
+
+    @GetMapping("/diseases/hot/page/{pageNum}")
+    @ApiOperation(value = "根据疾病热度排序，每页10个")
+    public List<Disease> gets_(@PathVariable Integer pageNum){
+        LambdaQueryWrapper<Disease> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Disease::getFavoriteNumber);
+        Page<Disease> page = diseaseService.page(new Page<>(pageNum, defaultPageSize), queryWrapper);
+        return page.getRecords();
+    }
+
 }
 
