@@ -45,6 +45,9 @@ public class User implements Serializable {
     @ApiModelProperty(value = "用户邮箱")
     private String email;
 
+    @ApiModelProperty(value = "用户头像")
+    private String avatar;
+
 
     @Null(message = "此接口无法更新用户密码", groups = UpdateGroup.class)
     @Password(groups = InsertGroup.class)

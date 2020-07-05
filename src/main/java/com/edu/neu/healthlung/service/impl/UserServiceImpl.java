@@ -44,6 +44,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Value("${healthlung.sign}")
     private String sign;
 
+    @Value("${healthlung.default-avatar}")
+    private String defaultAvatar;
+
     private static final String TABLENAME = "login";
 
     @Resource
@@ -65,6 +68,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String encryptPassword = Encoder.string2Sha1(password);
 
         user.setPassword(encryptPassword);
+
+        //设置为默认头像
+        if(user.getAvatar() == null || user.getAvatar().equals("")){
+            user.setAvatar(defaultAvatar);
+        }
 
         if(userMapper.insert(user) == 0){
             throw new DefaultException("注册失败");
