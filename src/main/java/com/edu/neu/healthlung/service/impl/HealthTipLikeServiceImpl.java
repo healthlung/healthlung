@@ -1,6 +1,8 @@
 package com.edu.neu.healthlung.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.edu.neu.healthlung.entity.HealthTip;
+import com.edu.neu.healthlung.entity.HealthTipFavorite;
 import com.edu.neu.healthlung.entity.HealthTipLike;
 import com.edu.neu.healthlung.exception.BadDataException;
 import com.edu.neu.healthlung.exception.DefaultException;
@@ -29,6 +31,12 @@ public class HealthTipLikeServiceImpl extends ServiceImpl<HealthTipLikeMapper, H
     @Resource
     UserService userService;
 
+    private boolean exist(HealthTipLike entity){
+        LambdaQueryWrapper<HealthTipLike> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(HealthTipLike::getHealthTipId, entity.getHealthTipId()).eq(HealthTipLike::getUserId, entity.getUserId());
+        return super.getOne(queryWrapper) != null;
+    }
+
     @Override
     public boolean save(HealthTipLike entity) {
 
@@ -40,6 +48,10 @@ public class HealthTipLikeServiceImpl extends ServiceImpl<HealthTipLikeMapper, H
 
         if(userService.getById(entity.getUserId()) == null){
             throw new BadDataException("给定用户不存在");
+        }
+
+        if(this.exist(entity)){
+            throw new BadDataException("无法重复点赞");
         }
 
         healthTip.setLikeNumber(healthTip.getLikeNumber() + 1);

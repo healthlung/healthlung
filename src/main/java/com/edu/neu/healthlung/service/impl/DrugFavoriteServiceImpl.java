@@ -39,6 +39,13 @@ public class DrugFavoriteServiceImpl extends ServiceImpl<DrugFavoriteMapper, Dru
     @Value("${healthlung.default-page-size}")
     private Integer defaultPageSize;
 
+
+    private boolean exist(DrugFavorite entity){
+        LambdaQueryWrapper<DrugFavorite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(DrugFavorite::getDrugId, entity.getDrugId()).eq(DrugFavorite::getUserId, entity.getUserId());
+        return super.getOne(queryWrapper) != null;
+    }
+
     @Override
     public boolean save(DrugFavorite entity) {
 
@@ -50,6 +57,10 @@ public class DrugFavoriteServiceImpl extends ServiceImpl<DrugFavoriteMapper, Dru
 
         if(userService.getById(entity.getUserId()) == null){
             throw new BadDataException("给定用户不存在");
+        }
+
+        if(this.exist(entity)){
+            throw new BadDataException("无法重复收藏");
         }
 
         drug.setFavoriteNumber(drug.getFavoriteNumber() + 1);

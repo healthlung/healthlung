@@ -43,6 +43,12 @@ public class DiseaseFavoriteServiceImpl extends ServiceImpl<DiseaseFavoriteMappe
     @Resource
     UserService userService;
 
+    private boolean exist(DiseaseFavorite entity){
+        LambdaQueryWrapper<DiseaseFavorite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(DiseaseFavorite::getDiseaseId, entity.getDiseaseId()).eq(DiseaseFavorite::getUserId, entity.getUserId());
+        return super.getOne(queryWrapper) != null;
+    }
+
     @Override
     public boolean save(DiseaseFavorite diseaseFavorite) {
 
@@ -55,6 +61,11 @@ public class DiseaseFavoriteServiceImpl extends ServiceImpl<DiseaseFavoriteMappe
         if(userService.getById(diseaseFavorite.getUserId()) == null){
             throw new BadDataException("给定用户不存在");
         }
+
+        if(this.exist(diseaseFavorite)){
+            throw new BadDataException("无法重复收藏");
+        }
+
 
         disease.setFavoriteNumber(disease.getFavoriteNumber() + 1);
 

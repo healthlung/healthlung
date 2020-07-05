@@ -2,10 +2,7 @@ package com.edu.neu.healthlung.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.edu.neu.healthlung.entity.Disease;
-import com.edu.neu.healthlung.entity.DiseaseFavorite;
-import com.edu.neu.healthlung.entity.Medicare;
-import com.edu.neu.healthlung.entity.MedicareFavorite;
+import com.edu.neu.healthlung.entity.*;
 import com.edu.neu.healthlung.exception.BadDataException;
 import com.edu.neu.healthlung.exception.DefaultException;
 import com.edu.neu.healthlung.exception.NoAuthException;
@@ -42,6 +39,12 @@ public class MedicareFavoriteServiceImpl extends ServiceImpl<MedicareFavoriteMap
     @Value("${healthlung.default-page-size}")
     private Integer defaultPageSize;
 
+    private boolean exist(MedicareFavorite entity){
+        LambdaQueryWrapper<MedicareFavorite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(MedicareFavorite::getMedicareId, entity.getMedicareId()).eq(MedicareFavorite::getUserId, entity.getUserId());
+        return super.getOne(queryWrapper) != null;
+    }
+
     @Override
     public boolean save(MedicareFavorite entity) {
 
@@ -53,6 +56,10 @@ public class MedicareFavoriteServiceImpl extends ServiceImpl<MedicareFavoriteMap
 
         if(userService.getById(entity.getUserId()) == null){
             throw new BadDataException("给定用户不存在");
+        }
+
+        if(this.exist(entity)){
+            throw new BadDataException("无法重复收藏");
         }
 
         medicare.setFavoriteNumber(medicare.getFavoriteNumber() + 1);
