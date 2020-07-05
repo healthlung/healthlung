@@ -41,6 +41,16 @@ public class DrugFavoriteController {
         return favoriteService.listByUserId(userId, pageNum);
     }
 
+    @GetMapping("/favorite/drug/{drugId}")
+    @ApiOperation(value = "根据药品ID和用户token，返回收藏实体")
+    @Auth(needToken = true)
+    public DrugFavorite get(@PathVariable Integer drugId){
+        Integer userId = ParamHolder.getCurrentUserId();
+        LambdaQueryWrapper<DrugFavorite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(DrugFavorite::getUserId, userId).eq(DrugFavorite::getDrugId, drugId);
+        return favoriteService.getOne(queryWrapper);
+    }
+
     @PostMapping("/favorite/drug/{drugId}")
     @ApiOperation(value = "收藏某个药品")
     @Auth(needToken = true)

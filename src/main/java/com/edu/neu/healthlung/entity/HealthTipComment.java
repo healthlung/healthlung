@@ -6,6 +6,7 @@ import java.util.Date;
 import java.io.Serializable;
 
 import com.edu.neu.healthlung.validate.InsertGroup;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -57,6 +58,7 @@ public class HealthTipComment implements Serializable {
     private User user;
 
     @TableLogic
+    @JsonIgnore
     private Boolean flag;
 
 

@@ -27,7 +27,7 @@ healthlung:
   default-province: 北京
   default-city: 朝阳区
   sign: whosyourdaddy
-  default-avatar: https://healthlung.oss-cn-beijing.aliyuncs.com/defaultAvator.png
+  default-avatar: https://healthlung.oss-cn-beijing.aliyuncs.com/defaultAvatar.png
 
 server:
   port: 8080

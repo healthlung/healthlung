@@ -7,6 +7,7 @@ import com.edu.neu.healthlung.annotation.Auth;
 import com.edu.neu.healthlung.entity.HealthTip;
 import com.edu.neu.healthlung.entity.HealthTipComment;
 import com.edu.neu.healthlung.entity.HealthTipFavorite;
+import com.edu.neu.healthlung.entity.HealthTipLike;
 import com.edu.neu.healthlung.exception.DefaultException;
 import com.edu.neu.healthlung.service.HealthTipCommentService;
 import com.edu.neu.healthlung.service.HealthTipFavoriteService;
@@ -37,6 +38,16 @@ public class HealthTipCommentController {
 
     @Resource
     private HealthTipCommentService commentService;
+
+    @GetMapping("/comment/healthTip/{healthTipId}")
+    @ApiOperation(value = "根据贴士ID和用户token，返回评论实体")
+    @Auth(needToken = true)
+    public HealthTipComment get(@PathVariable Integer healthTipId){
+        Integer userId = ParamHolder.getCurrentUserId();
+        LambdaQueryWrapper<HealthTipComment> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(HealthTipComment::getUserId, userId).eq(HealthTipComment::getHealthTipId, healthTipId);
+        return commentService.getOne(queryWrapper);
+    }
 
     @PostMapping("/comment/healthTip/{itemId}")
     @ApiOperation(value = "评论某个贴士")

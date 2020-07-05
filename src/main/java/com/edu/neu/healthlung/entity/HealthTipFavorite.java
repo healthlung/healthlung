@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import java.util.Date;
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -42,6 +43,7 @@ public class HealthTipFavorite implements Serializable {
     private Date createDate;
 
     @TableLogic
+    @JsonIgnore
     private Boolean flag;
 
     @TableField(exist = false)

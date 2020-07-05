@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.edu.neu.healthlung.annotation.Auth;
 import com.edu.neu.healthlung.entity.DiseaseFavorite;
 import com.edu.neu.healthlung.entity.DrugFavorite;
+import com.edu.neu.healthlung.entity.HealthTipComment;
 import com.edu.neu.healthlung.exception.DefaultException;
 import com.edu.neu.healthlung.service.DiseaseFavoriteService;
 import com.edu.neu.healthlung.util.ParamHolder;
@@ -39,6 +40,16 @@ public class DiseaseFavoriteController {
     public List<DiseaseFavorite> gets(@PathVariable Integer pageNum){
         Integer userId = ParamHolder.getCurrentUserId();
         return favoriteService.listByUserId(userId, pageNum);
+    }
+
+    @GetMapping("/favorite/disease/{diseaseId}")
+    @ApiOperation(value = "根据疾病ID和用户token，返回收藏实体")
+    @Auth(needToken = true)
+    public DiseaseFavorite get(@PathVariable Integer diseaseId){
+        Integer userId = ParamHolder.getCurrentUserId();
+        LambdaQueryWrapper<DiseaseFavorite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(DiseaseFavorite::getUserId, userId).eq(DiseaseFavorite::getDiseaseId, diseaseId);
+        return favoriteService.getOne(queryWrapper);
     }
 
     @PostMapping("/favorite/disease/{diseaseId}")

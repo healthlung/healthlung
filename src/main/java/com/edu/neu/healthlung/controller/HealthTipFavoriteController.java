@@ -4,6 +4,7 @@ package com.edu.neu.healthlung.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.edu.neu.healthlung.annotation.Auth;
+import com.edu.neu.healthlung.entity.HealthTip;
 import com.edu.neu.healthlung.entity.HealthTipComment;
 import com.edu.neu.healthlung.entity.HealthTipFavorite;
 
@@ -33,6 +34,16 @@ public class HealthTipFavoriteController {
 
     @Resource
     private HealthTipFavoriteService favoriteService;
+
+    @GetMapping("/favorite/healthTip/{healthTipId}")
+    @ApiOperation(value = "根据贴士ID和用户token，返回收藏实体")
+    @Auth(needToken = true)
+    public HealthTipFavorite get(@PathVariable Integer healthTipId){
+        Integer userId = ParamHolder.getCurrentUserId();
+        LambdaQueryWrapper<HealthTipFavorite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(HealthTipFavorite::getUserId, userId).eq(HealthTipFavorite::getHealthTipId, healthTipId);
+        return favoriteService.getOne(queryWrapper);
+    }
 
     @GetMapping("/favorites/healthTip/page/{pageNum}")
     @ApiOperation(value = "返回用户收藏的贴士，每页10个")

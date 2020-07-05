@@ -47,6 +47,16 @@ public class MedicareFavoriteController {
 //        return favoriteService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
     }
 
+    @GetMapping("/favorite/medicare/{medicareId}")
+    @ApiOperation(value = "根据医保ID和用户token，返回收藏实体")
+    @Auth(needToken = true)
+    public MedicareFavorite get(@PathVariable Integer medicareId){
+        Integer userId = ParamHolder.getCurrentUserId();
+        LambdaQueryWrapper<MedicareFavorite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(MedicareFavorite::getUserId, userId).eq(MedicareFavorite::getMedicareId, medicareId);
+        return favoriteService.getOne(queryWrapper);
+    }
+
     @PostMapping("/favorite/medicare/{itemId}")
     @ApiOperation(value = "收藏某个医保政策")
     @Auth(needToken = true)
