@@ -1,8 +1,11 @@
 package com.edu.neu.healthlung.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.edu.neu.healthlung.entity.HealthTip;
 import com.edu.neu.healthlung.entity.HealthTipComment;
 import com.edu.neu.healthlung.entity.HealthTipLike;
+import com.edu.neu.healthlung.entity.User;
 import com.edu.neu.healthlung.exception.BadDataException;
 import com.edu.neu.healthlung.exception.DefaultException;
 import com.edu.neu.healthlung.mapper.HealthTipCommentMapper;
@@ -10,9 +13,11 @@ import com.edu.neu.healthlung.service.HealthTipCommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.edu.neu.healthlung.service.HealthTipService;
 import com.edu.neu.healthlung.service.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -29,6 +34,9 @@ public class HealthTipCommentServiceImpl extends ServiceImpl<HealthTipCommentMap
 
     @Resource
     UserService userService;
+
+    @Value("${healthlung.default-page-size}")
+    private Integer defaultPageSize;
 
     @Override
     public boolean save(HealthTipComment entity) {
@@ -49,5 +57,18 @@ public class HealthTipCommentServiceImpl extends ServiceImpl<HealthTipCommentMap
             throw new DefaultException("点赞失败");
         }
         return super.save(entity);
+    }
+
+
+    @Override
+    public List<HealthTipComment> listWithUser(Integer pageNum, Integer healthTipId) {
+        LambdaQueryWrapper<HealthTipComment> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(HealthTipComment::getHealthTipCommentId, healthTipId);
+        List<HealthTipComment> healthTipCommentList = super.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
+        for(HealthTipComment healthTipComment: healthTipCommentList){
+            User user = userService.getById(healthTipComment.getUserId());
+            healthTipComment.setUser(user);
+        }
+        return healthTipCommentList;
     }
 }

@@ -53,6 +53,9 @@ public class HealthTipComment implements Serializable {
     @ApiModelProperty(value = "被回复评论ID")
     private Integer lastCommentId;
 
+    @TableField(exist = false)
+    private User user;
+
     @TableLogic
     private Boolean flag;
 

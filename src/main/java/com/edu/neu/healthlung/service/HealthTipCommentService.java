@@ -2,6 +2,9 @@ package com.edu.neu.healthlung.service;
 
 import com.edu.neu.healthlung.entity.HealthTipComment;
 import com.baomidou.mybatisplus.extension.service.IService;
+import io.swagger.models.auth.In;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface HealthTipCommentService extends IService<HealthTipComment> {
 
+    List<HealthTipComment> listWithUser(Integer pageNum, Integer healthTipId);
 }

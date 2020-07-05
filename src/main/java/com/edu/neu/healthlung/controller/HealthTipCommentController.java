@@ -54,9 +54,7 @@ public class HealthTipCommentController {
     @GetMapping("/comments/healthTip/{healthTipId}/page/{pageNum}/")
     @ApiOperation(value = "返回贴士对应的评论，每页10个")
     public List<HealthTipComment> gets(@PathVariable Integer pageNum, @PathVariable Integer healthTipId){
-        LambdaQueryWrapper<HealthTipComment> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(HealthTipComment::getHealthTipCommentId, healthTipId);
-        return commentService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
+        return commentService.listWithUser(pageNum, healthTipId);
     }
 
 }
