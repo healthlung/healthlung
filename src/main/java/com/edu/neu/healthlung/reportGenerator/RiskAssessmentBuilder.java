@@ -57,7 +57,7 @@ public class RiskAssessmentBuilder implements ReportBuilder {
         Map<List<Double>, Integer>  map_2 = new HashMap<>();
         assessmentMap.put(LungNode.LungNodeType.部分实性, map_2);
 
-        //亚实性低危
+        //亚实性中危
         List<Double> list_4 = new ArrayList<>();
         list_4.add(0.0);
         list_4.add(8.0);

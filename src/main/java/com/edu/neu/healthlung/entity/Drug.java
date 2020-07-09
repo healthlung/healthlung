@@ -49,7 +49,7 @@ public class Drug implements Serializable {
     private String mainIngredient;
 
     @ApiModelProperty(value = "功能主治")
-    private String function;
+    private String functionalIndication;
 
     @ApiModelProperty(value = "用法用量")
     private String dosage;
