@@ -43,7 +43,7 @@ public class MedicareController {
         return item;
     }
 
-    @GetMapping("/medicares/hot/page/{pageNum}/")
+    @GetMapping("/medicares/hot/page/{pageNum}")
     @ApiOperation(value = "返回医保政策列表每页10个，按照热度排序")
     public List<Medicare> gets__(@PathVariable Integer pageNum){
         LambdaQueryWrapper<Medicare> queryWrapper = new LambdaQueryWrapper<>();
@@ -52,7 +52,7 @@ public class MedicareController {
         return page.getRecords();
     }
 
-    @GetMapping("/medicares/page/{pageNum}/")
+    @GetMapping("/medicares/page/{pageNum}")
     @ApiOperation(value = "返回医保政策列表每页10个，按照时间排序")
     public List<Medicare> gets(@PathVariable Integer pageNum){
         LambdaQueryWrapper<Medicare> queryWrapper = new LambdaQueryWrapper<>();
