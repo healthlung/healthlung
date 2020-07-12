@@ -38,11 +38,18 @@ public class InterviewRecordController {
     @Resource
     InterviewRecordService interviewRecordService;
 
-    @PostMapping("/interviewRecord")
+    @PostMapping("/interviewRecord/v2")
     @Auth(needToken = true)
-    @ApiOperation(value = "生成问诊记录")
+    @ApiOperation(value = "生成问诊记录(开发中，不可用)")
     public InterviewRecord generateRecord(@RequestParam("video") MultipartFile video) {
         return interviewRecordService.generateRecord(video);
+    }
+
+    @PostMapping("/interviewRecord")
+    @Auth(needToken = true)
+    @ApiOperation(value = "生成问诊记录(demo)")
+    public Integer generateRecord() {
+        return interviewRecordService.generateRecord();
     }
 
     @GetMapping("/interviewRecord/{recordId}")
@@ -56,12 +63,12 @@ public class InterviewRecordController {
         return interviewRecord;
     }
 
-    @GetMapping("/interviewRecords/page/{pageNum}/")
+    @GetMapping("/interviewRecords/page/{pageNum}")
     @ApiOperation(value = "返回当前用户诊断记录列表每页10个")
     @Auth(needToken = true)
     public List<InterviewRecord> gets(@PathVariable Integer pageNum){
         LambdaQueryWrapper<InterviewRecord> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(InterviewRecord::getUserId, ParamHolder.getCurrentUserId());
+        queryWrapper.eq(InterviewRecord::getUserId, ParamHolder.getCurrentUserId()).orderByDesc(InterviewRecord::getCreateDate);
         return interviewRecordService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
     }
 }

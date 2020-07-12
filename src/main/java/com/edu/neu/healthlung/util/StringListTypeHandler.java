@@ -3,6 +3,8 @@ import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -17,12 +19,15 @@ import java.util.StringJoiner;
 @MappedTypes(List.class)
 public class StringListTypeHandler extends BaseTypeHandler<List<String>> {
 
+    Logger logger = LoggerFactory.getLogger(StringListTypeHandler.class);
+
     @Override
     public void setNonNullParameter(PreparedStatement preparedStatement, int i, List<String> strings, JdbcType jdbcType) throws SQLException {
         StringJoiner stringJoiner = new StringJoiner(",");
         for (String str : strings) {
             stringJoiner.add(str);
         }
+//        logger.error(stringJoiner.toString());
         preparedStatement.setString(i, stringJoiner.toString());
     }
 

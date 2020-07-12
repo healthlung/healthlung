@@ -56,7 +56,7 @@ public class HealthTipLikeServiceImpl extends ServiceImpl<HealthTipLikeMapper, H
 
         healthTip.setLikeNumber(healthTip.getLikeNumber() + 1);
 
-        if(!healthTipService.save(healthTip)){
+        if(!healthTipService.updateById(healthTip)){
             throw new DefaultException("点赞失败");
         }
 

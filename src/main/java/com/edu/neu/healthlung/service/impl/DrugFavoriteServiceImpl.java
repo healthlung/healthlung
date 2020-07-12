@@ -65,7 +65,7 @@ public class DrugFavoriteServiceImpl extends ServiceImpl<DrugFavoriteMapper, Dru
 
         drug.setFavoriteNumber(drug.getFavoriteNumber() + 1);
 
-        if(!drugService.save(drug)){
+        if(!drugService.updateById(drug)){
             throw new DefaultException("收藏药品失败");
         }
 
@@ -75,7 +75,10 @@ public class DrugFavoriteServiceImpl extends ServiceImpl<DrugFavoriteMapper, Dru
     @Override
     public boolean removeByIdWithCheck(Integer itemId) {
 
-        DrugFavorite dbItem = super.getById(itemId);
+        LambdaQueryWrapper<DrugFavorite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(DrugFavorite::getDrugId, itemId).eq(DrugFavorite::getUserId, ParamHolder.getCurrentUserId());
+
+        DrugFavorite dbItem = super.getOne(queryWrapper);
 
         if(dbItem == null){
             throw new NotFoundException("给定药品收藏不存在");
@@ -93,11 +96,11 @@ public class DrugFavoriteServiceImpl extends ServiceImpl<DrugFavoriteMapper, Dru
 
         drug.setFavoriteNumber(drug.getFavoriteNumber() - 1);
 
-        if(!drugService.save(drug)){
+        if(!drugService.updateById(drug)){
             throw new DefaultException("取消收藏药品失败");
         }
 
-        return super.removeById(itemId);
+        return super.removeById(dbItem.getDrugFavoriteId());
     }
 
     @Override

@@ -138,4 +138,9 @@ public class InterviewRecordServiceImpl extends ServiceImpl<InterviewRecordMappe
         //返回，主键应该回填了
         return interviewRecord;
     }
+
+    @Override
+    public Integer generateRecord() {
+        return this.generateRecord(null).getInterviewRecordId();
+    }
 }

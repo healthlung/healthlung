@@ -1,16 +1,15 @@
 package com.edu.neu.healthlung.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.util.Date;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.util.List;
 
 import com.edu.neu.healthlung.util.LungNodeListTypeHandler;
 import com.edu.neu.healthlung.util.StringListTypeHandler;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
@@ -30,6 +29,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="问诊记录")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@TableName(value = "interview_record",autoResultMap = true)
 public class InterviewRecord implements Serializable {
 
     private static final long serialVersionUID=1L;
@@ -42,7 +42,7 @@ public class InterviewRecord implements Serializable {
     private Integer userId;
 
     @ApiModelProperty(value = "CT图像列表")
-    @TableField(value = "ct_image_urls", typeHandler = StringListTypeHandler.class)
+    @TableField(typeHandler = StringListTypeHandler.class)
     private List<String> ctImageUrls;
 
     @ApiModelProperty(value = "图片描述")
@@ -69,7 +69,8 @@ public class InterviewRecord implements Serializable {
     @ApiModelProperty(value = "国家推荐医生ID")
     private Integer countryRecommendedDoctorId;
 
-    @ApiModelProperty(value = "医院ID")
+    @ApiModelProperty(value = "发布日期")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT)
     private Date createDate;
 

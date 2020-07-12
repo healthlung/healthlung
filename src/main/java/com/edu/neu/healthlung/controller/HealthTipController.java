@@ -42,7 +42,7 @@ public class HealthTipController {
         return healthTip;
     }
 
-    @GetMapping("/healthTips/page/{pageNum}/")
+    @GetMapping("/healthTips/page/{pageNum}")
     @ApiOperation(value = "返回贴士列表每页10个, 按照时间排序")
     public List<HealthTip> gets(@PathVariable Integer pageNum){
         LambdaQueryWrapper<HealthTip> queryWrapper = new LambdaQueryWrapper<>();
@@ -50,7 +50,7 @@ public class HealthTipController {
         return healthTipService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
     }
 
-    @GetMapping("/healthTips/hot/page/{pageNum}/")
+    @GetMapping("/healthTips/hot/page/{pageNum}")
     @ApiOperation(value = "返回贴士列表每页10个, 按照热度排序")
     public List<HealthTip> gets__(@PathVariable Integer pageNum){
         LambdaQueryWrapper<HealthTip> queryWrapper = new LambdaQueryWrapper<>();

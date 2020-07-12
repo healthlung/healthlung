@@ -48,7 +48,7 @@ public class MedicareController {
     public List<Medicare> gets__(@PathVariable Integer pageNum){
         LambdaQueryWrapper<Medicare> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.select(Medicare::getTitle, Medicare::getCity, Medicare::getPublishDate, Medicare::getFavoriteNumber, Medicare::getMedicareId, Medicare::getImageUrl);
-        queryWrapper.orderByDesc(Medicare::getPublishDate);
+        queryWrapper.orderByDesc(Medicare::getFavoriteNumber);
         Page<Medicare> page = medicareService.page(new Page<>(pageNum, defaultPageSize), queryWrapper);
         return page.getRecords();
     }

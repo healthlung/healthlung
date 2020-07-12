@@ -102,7 +102,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
         redisTemplate.opsForValue().set(TABLENAME + user.getUserId(), token);
-        redisTemplate.expire(TABLENAME + user.getUserId(), 1, TimeUnit.HOURS);
+        redisTemplate.expire(TABLENAME + user.getUserId(), 2, TimeUnit.DAYS);
 
         return token;
     }

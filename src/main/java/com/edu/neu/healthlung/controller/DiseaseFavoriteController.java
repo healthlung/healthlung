@@ -66,11 +66,11 @@ public class DiseaseFavoriteController {
         return "收藏疾病成功";
     }
 
-    @DeleteMapping("/favorite/disease/{itemId}")
+    @DeleteMapping("/favorite/disease/{diseaseId}")
     @ApiOperation(value = "取消收藏某个疾病")
     @Auth(needToken = true)
-    public String remove(@PathVariable Integer itemId){
-        if(!favoriteService.removeByIdWithCheck(itemId)){
+    public String remove(@PathVariable Integer diseaseId){
+        if(!favoriteService.removeByIdWithCheck(diseaseId)){
             throw new DefaultException("取消收藏疾病失败");
         }
         return "取消收藏疾病成功";

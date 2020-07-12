@@ -3,7 +3,9 @@ package com.edu.neu.healthlung.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -32,7 +34,7 @@ public class HealthRecord implements Serializable {
     @TableId(value = "health_record_id", type = IdType.AUTO)
     private Integer healthRecordId;
 
-    @Null(message = "禁止传入用户ID")
+
     @ApiModelProperty(value = "用户ID")
     private Integer userId;
 
@@ -44,10 +46,10 @@ public class HealthRecord implements Serializable {
     @ApiModelProperty(value = "性别")
     private String sex;
 
-    @Min(value = 1, message = "年龄必须大于1岁")
-    @Max(value = 200, message = "年龄必须小于200岁")
+    @Past(message = "出生日期字段非法")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     @ApiModelProperty(value = "年龄")
-    private Integer age;
+    private Date birthday;
 
     @NotNull(message = "是否有慢性肺部疾病字段不能为空")
     @ApiModelProperty(value = "是否有慢性肺部疾病")

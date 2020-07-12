@@ -17,4 +17,6 @@ public interface InterviewRecordService extends IService<InterviewRecord> {
     InterviewRecord getByIdWithCheck(Integer recordId);
 
     InterviewRecord generateRecord(MultipartFile video);
+
+    Integer generateRecord();
 }

@@ -64,7 +64,7 @@ public class HealthTipFavoriteServiceImpl extends ServiceImpl<HealthTipFavoriteM
 
         healthTip.setFavoriteNumber(healthTip.getFavoriteNumber() + 1);
 
-        if(!healthTipService.save(healthTip)){
+        if(!healthTipService.updateById(healthTip)){
             throw new DefaultException("点赞失败");
         }
 
@@ -72,9 +72,12 @@ public class HealthTipFavoriteServiceImpl extends ServiceImpl<HealthTipFavoriteM
     }
 
     @Override
-    public boolean removeByIdWithCheck(Integer itemId) {
+    public boolean removeByIdWithCheck(Integer healthTipId) {
 
-        HealthTipFavorite dbItem = super.getById(itemId);
+        LambdaQueryWrapper<HealthTipFavorite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(HealthTipFavorite::getHealthTipId, healthTipId).eq(HealthTipFavorite::getUserId, ParamHolder.getCurrentUserId());
+
+        HealthTipFavorite dbItem = super.getOne(queryWrapper);
 
         if(dbItem == null){
             throw new NotFoundException("给定贴士收藏不存在");
@@ -91,11 +94,11 @@ public class HealthTipFavoriteServiceImpl extends ServiceImpl<HealthTipFavoriteM
 
         healthTip.setFavoriteNumber(healthTip.getFavoriteNumber() - 1);
 
-        if(!healthTipService.save(healthTip)){
+        if(!healthTipService.updateById(healthTip)){
             throw new DefaultException("取消点赞失败");
         }
 
-        return super.removeById(itemId);
+        return super.removeById(dbItem.getHealthTipFavoriteId());
     }
 
     @Override

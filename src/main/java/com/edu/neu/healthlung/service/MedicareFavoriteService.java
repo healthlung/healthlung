@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface MedicareFavoriteService extends IService<MedicareFavorite> {
 
-    boolean removeByIdWithCheck(Integer itemId);
+    boolean removeByMedicareId(Integer itemId);
 
     List<MedicareFavorite> listByUserId(Integer userId, Integer pageNum);
 }

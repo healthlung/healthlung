@@ -53,7 +53,7 @@ public class HealthTipCommentServiceImpl extends ServiceImpl<HealthTipCommentMap
 
         // 评论数 + 1
         healthTip.setCommentNumber(healthTip.getCommentNumber() + 1);
-        if(!healthTipService.save(healthTip)){
+        if(!healthTipService.updateById(healthTip)){
             throw new DefaultException("点赞失败");
         }
         return super.save(entity);
@@ -63,7 +63,7 @@ public class HealthTipCommentServiceImpl extends ServiceImpl<HealthTipCommentMap
     @Override
     public List<HealthTipComment> listWithUser(Integer pageNum, Integer healthTipId) {
         LambdaQueryWrapper<HealthTipComment> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(HealthTipComment::getHealthTipCommentId, healthTipId);
+        queryWrapper.eq(HealthTipComment::getHealthTipId, healthTipId);
         List<HealthTipComment> healthTipCommentList = super.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
         for(HealthTipComment healthTipComment: healthTipCommentList){
             User user = userService.getById(healthTipComment.getUserId());

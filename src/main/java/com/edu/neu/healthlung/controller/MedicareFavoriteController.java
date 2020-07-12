@@ -71,11 +71,11 @@ public class MedicareFavoriteController {
         return "收藏医保政策成功";
     }
 
-    @DeleteMapping("/favorite/medicare/{itemId}")
+    @DeleteMapping("/favorite/medicare/{medicareId}")
     @ApiOperation(value = "取消收藏某个医保政策")
     @Auth(needToken = true)
-    public String remove(@PathVariable Integer itemId){
-        if(!favoriteService.removeByIdWithCheck(itemId)){
+    public String remove(@PathVariable Integer medicareId){
+        if(!favoriteService.removeByMedicareId(medicareId)){
             throw new DefaultException("取消收藏医保政策失败");
         }
         return "取消收藏医保政策成功";

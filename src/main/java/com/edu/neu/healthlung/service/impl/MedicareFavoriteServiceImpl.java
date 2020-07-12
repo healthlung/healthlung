@@ -64,17 +64,35 @@ public class MedicareFavoriteServiceImpl extends ServiceImpl<MedicareFavoriteMap
 
         medicare.setFavoriteNumber(medicare.getFavoriteNumber() + 1);
 
-        if(!medicareService.save(medicare)){
+        if(!medicareService.updateById(medicare)){
             throw new DefaultException("收藏医保失败");
         }
 
         return super.save(entity);
     }
 
-    @Override
-    public boolean removeByIdWithCheck(Integer itemId) {
 
-        MedicareFavorite dbItem = super.getById(itemId);
+    @Override
+    public List<MedicareFavorite> listByUserId(Integer userId, Integer pageNum) {
+
+        LambdaQueryWrapper<MedicareFavorite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(MedicareFavorite::getUserId, ParamHolder.getCurrentUserId());
+
+        List<MedicareFavorite> favoriteList = super.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
+
+        for(MedicareFavorite item : favoriteList){
+            Integer subId = item.getMedicareId();
+            Medicare sub = medicareService.getById(subId);
+            item.setMedicare(sub);
+        }
+        return favoriteList;
+    }
+
+    @Override
+    public boolean removeByMedicareId(Integer medicareId) {
+        LambdaQueryWrapper<MedicareFavorite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(MedicareFavorite::getMedicareId, medicareId).eq(MedicareFavorite::getUserId, ParamHolder.getCurrentUserId());
+        MedicareFavorite dbItem = super.getOne(queryWrapper);
 
         if(dbItem == null){
             throw new NotFoundException("给定医保收藏不存在");
@@ -92,26 +110,10 @@ public class MedicareFavoriteServiceImpl extends ServiceImpl<MedicareFavoriteMap
 
         medicare.setFavoriteNumber(medicare.getFavoriteNumber() - 1);
 
-        if(!medicareService.save(medicare)){
-            throw new DefaultException("收藏医保失败");
+        if(!medicareService.updateById(medicare)){
+            throw new DefaultException("取消收藏医保失败");
         }
 
-        return super.removeById(itemId);
-    }
-
-    @Override
-    public List<MedicareFavorite> listByUserId(Integer userId, Integer pageNum) {
-
-        LambdaQueryWrapper<MedicareFavorite> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(MedicareFavorite::getUserId, ParamHolder.getCurrentUserId());
-
-        List<MedicareFavorite> favoriteList = super.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
-
-        for(MedicareFavorite item : favoriteList){
-            Integer subId = item.getMedicareId();
-            Medicare sub = medicareService.getById(subId);
-            item.setMedicare(sub);
-        }
-        return null;
+        return super.removeById(dbItem.getMedicareFavoriteId());
     }
 }

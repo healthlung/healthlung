@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import java.util.Date;
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
@@ -39,6 +40,7 @@ public class HealthTipLike implements Serializable {
     private Integer userId;
 
     @ApiModelProperty(value = "点赞日期")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT)
     private Date createDate;
 

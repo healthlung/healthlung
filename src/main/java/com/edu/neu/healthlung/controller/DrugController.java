@@ -43,7 +43,7 @@ public class DrugController {
         return drug;
     }
 
-    @GetMapping("/drugs/page/{pageNum}/")
+    @GetMapping("/drugs/page/{pageNum}")
     @ApiOperation(value = "返回药品列表每页10个")
     public List<Drug> gets(@PathVariable Integer pageNum){
         Page<Drug> page = drugService.page(new Page<>(pageNum, defaultPageSize));

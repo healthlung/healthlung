@@ -67,11 +67,11 @@ public class HealthTipFavoriteController {
         return "收藏贴士成功";
     }
 
-    @DeleteMapping("/favorite/healthTip/{itemId}")
+    @DeleteMapping("/favorite/healthTip/{healthTipId}")
     @ApiOperation(value = "取消收藏某个贴士")
     @Auth(needToken = true)
-    public String remove(@PathVariable Integer itemId){
-        if(!favoriteService.removeByIdWithCheck(itemId)){
+    public String remove(@PathVariable Integer healthTipId){
+        if(!favoriteService.removeByIdWithCheck(healthTipId)){
             throw new DefaultException("取消收藏贴士失败");
         }
         return "取消收藏贴士成功";

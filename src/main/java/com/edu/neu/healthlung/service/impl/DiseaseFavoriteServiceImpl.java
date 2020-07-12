@@ -2,10 +2,7 @@ package com.edu.neu.healthlung.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.edu.neu.healthlung.entity.Disease;
-import com.edu.neu.healthlung.entity.DiseaseFavorite;
-import com.edu.neu.healthlung.entity.DrugFavorite;
-import com.edu.neu.healthlung.entity.HealthTip;
+import com.edu.neu.healthlung.entity.*;
 import com.edu.neu.healthlung.exception.BadDataException;
 import com.edu.neu.healthlung.exception.DefaultException;
 import com.edu.neu.healthlung.exception.NoAuthException;
@@ -69,7 +66,7 @@ public class DiseaseFavoriteServiceImpl extends ServiceImpl<DiseaseFavoriteMappe
 
         disease.setFavoriteNumber(disease.getFavoriteNumber() + 1);
 
-        if(!diseaseService.save(disease)){
+        if(!diseaseService.updateById(disease)){
             throw new DefaultException("收藏疾病失败");
         }
 
@@ -79,7 +76,10 @@ public class DiseaseFavoriteServiceImpl extends ServiceImpl<DiseaseFavoriteMappe
     @Override
     public boolean removeByIdWithCheck(Integer itemId) {
 
-        DiseaseFavorite dbItem = super.getById(itemId);
+        LambdaQueryWrapper<DiseaseFavorite> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(DiseaseFavorite::getDiseaseId, itemId).eq(DiseaseFavorite::getUserId, ParamHolder.getCurrentUserId());
+
+        DiseaseFavorite dbItem = super.getOne(queryWrapper);
 
         if(dbItem == null){
             throw new NotFoundException("给定疾病收藏不存在");
@@ -97,11 +97,11 @@ public class DiseaseFavoriteServiceImpl extends ServiceImpl<DiseaseFavoriteMappe
 
         disease.setFavoriteNumber(disease.getFavoriteNumber() - 1);
 
-        if(!diseaseService.save(disease)){
+        if(!diseaseService.updateById(disease)){
             throw new DefaultException("取消收藏失败");
         }
 
-        return super.removeById(itemId);
+        return super.removeById(dbItem.getDiseaseFavoriteId());
     }
 
     @Override

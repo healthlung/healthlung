@@ -30,7 +30,7 @@ public class HospitalBuilder implements ReportBuilder {
             if(!doctor.getDoctorId().equals(interviewRecord.getCityRecommendedDoctorId())){
                 interviewRecord.setProvinceRecommendedDoctorId(doctor.getDoctorId());
                 stringBuilder.append(String.format(sentence, doctor.getHospitalName(), doctor.getDepartment(), doctor.getName()));
-
+                break;
             }
         }
         for(Doctor doctor: countryDoctors){
@@ -38,6 +38,7 @@ public class HospitalBuilder implements ReportBuilder {
                     && !doctor.getDoctorId().equals(interviewRecord.getProvinceRecommendedDoctorId())){
                 interviewRecord.setCountryRecommendedDoctorId(doctor.getDoctorId());
                 stringBuilder.append(String.format(sentence, doctor.getHospitalName(), doctor.getDepartment(), doctor.getName()));
+                break;
             }
         }
         interviewRecord.setHospitalRecommend(stringBuilder.toString());

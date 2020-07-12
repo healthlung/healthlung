@@ -62,7 +62,7 @@ public class HealthTipCommentController {
         return "评论贴士成功";
     }
 
-    @GetMapping("/comments/healthTip/{healthTipId}/page/{pageNum}/")
+    @GetMapping("/comments/healthTip/{healthTipId}/page/{pageNum}")
     @ApiOperation(value = "返回贴士对应的评论，每页10个")
     public List<HealthTipComment> gets(@PathVariable Integer pageNum, @PathVariable Integer healthTipId){
         return commentService.listWithUser(pageNum, healthTipId);
