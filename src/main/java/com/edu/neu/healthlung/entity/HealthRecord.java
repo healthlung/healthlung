@@ -25,7 +25,6 @@ import javax.validation.constraints.*;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="健康档案")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class HealthRecord implements Serializable {
 
     private static final long serialVersionUID=1L;
