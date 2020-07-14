@@ -17,7 +17,8 @@ public class TokenGenerator {
         builder.withClaim("userId", userId.toString());
 
         //token第二部分：时间戳
-        builder.withClaim("loginTime", System.currentTimeMillis());
+        //暂时不加时间戳，因为要多用户同时登陆，保证token不失效
+//        builder.withClaim("loginTime", System.currentTimeMillis());
 
 //        //token第二部分：projectId
 //        if(projectId != null){
