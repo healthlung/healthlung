@@ -12,6 +12,8 @@ import com.edu.neu.healthlung.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.edu.neu.healthlung.util.Encoder;
 import com.edu.neu.healthlung.util.TokenGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,8 @@ import java.util.concurrent.TimeUnit;
 @Transactional
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Resource
     private UserMapper userMapper;
@@ -103,6 +107,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         redisTemplate.opsForValue().set(TABLENAME + user.getUserId(), token);
         redisTemplate.expire(TABLENAME + user.getUserId(), 2, TimeUnit.DAYS);
+
+        logger.info(token);
 
         return token;
     }
