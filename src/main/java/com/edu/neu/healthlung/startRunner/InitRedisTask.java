@@ -24,6 +24,9 @@ public class InitRedisTask implements ApplicationRunner {
     DiseaseInitializer diseaseInitializer;
 
     @Resource
+    DrugInitializer drugInitializer;
+
+    @Resource
     private RedisTemplate<Object, Object> redisTemplate;
 
     @Override

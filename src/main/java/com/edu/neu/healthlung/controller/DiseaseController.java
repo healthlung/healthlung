@@ -47,7 +47,6 @@ public class DiseaseController {
         return diseaseService.pageOrderByHot(pageNum);
     }
 
-    //todo: 用ES搜索
     @GetMapping("/diseases/page/{pageNum}/query/{queryStr}")
     @ApiOperation(value = "根据疾病名称和症状模糊搜索，每页10个")
     public List<Disease> gets(@PathVariable Integer pageNum, @PathVariable String queryStr){

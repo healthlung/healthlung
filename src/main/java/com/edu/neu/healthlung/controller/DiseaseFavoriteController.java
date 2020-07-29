@@ -52,6 +52,7 @@ public class DiseaseFavoriteController {
         return favoriteService.getOne(queryWrapper);
     }
 
+    //todo: 更新缓存
     @PostMapping("/favorite/disease/{diseaseId}")
     @ApiOperation(value = "收藏某个疾病")
     @Auth(needToken = true)
@@ -66,6 +67,7 @@ public class DiseaseFavoriteController {
         return "收藏疾病成功";
     }
 
+    //todo: 更新缓存
     @DeleteMapping("/favorite/disease/{diseaseId}")
     @ApiOperation(value = "取消收藏某个疾病")
     @Auth(needToken = true)

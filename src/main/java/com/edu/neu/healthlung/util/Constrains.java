@@ -19,6 +19,10 @@ public class Constrains {
 
     public static final String DISEASE_HOT_ZSET_KEY = "disease_hot_zset";
 
+    public static final String DRUG_DICT_KEY = "drug_dict";
+
+    public static final String DRUG_HOT_ZSET_KEY = "drug_hot_zset";
+
     public Constrains(){
         healthTipModuleMap = new HashMap<>();
         healthTipModuleMap.put("健康食谱", "food");
