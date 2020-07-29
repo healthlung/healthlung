@@ -46,7 +46,11 @@ public class DiseaseInitializer implements RedisInitializer {
         diseaseList.forEach(item -> {
             String pinyinKey = item.getPinyin();
             String fullKey = Constrains.DISEASE_HOT_ZSET_KEY + "_" + pinyinKey;
-            redisTemplate.opsForZSet().add(fullKey, item.getDiseaseId(), item.getFavoriteNumber());
+            Disease disease = new Disease();
+            disease.setPinyin(item.getPinyin());
+            disease.setDiseaseId(item.getDiseaseId());
+            disease.setName(item.getName());
+            redisTemplate.opsForZSet().add(fullKey, disease, item.getFavoriteNumber());
         });
     }
 }
