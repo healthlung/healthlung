@@ -1,10 +1,18 @@
 spring:
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+  elasticsearch:
+    rest:
+      uris: http://zady.top:9200
   profiles:
     active: dev
   servlet:
     multipart:
       max-file-size: 500MB
       max-request-size: 1000MB
+
 
 
 

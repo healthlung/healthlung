@@ -30,7 +30,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     private static final String TABLENAME = "login";
 
     @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<Object, Object> redisTemplate;
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
 
