@@ -114,6 +114,11 @@ public class GlobalConfig implements WebMvcConfigurer {
         RedisTemplate<Object,Object> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
         Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
+        //解决查询缓存转换异常的问题
+        ObjectMapper om = new ObjectMapper();
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        serializer.setObjectMapper(om);
         template.setDefaultSerializer(serializer);
         return template;
     }

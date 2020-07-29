@@ -46,16 +46,13 @@ public class DrugController {
     @GetMapping("/drugs/page/{pageNum}")
     @ApiOperation(value = "返回药品列表每页10个")
     public List<Drug> gets(@PathVariable Integer pageNum){
-        Page<Drug> page = drugService.page(new Page<>(pageNum, defaultPageSize));
-        return page.getRecords();
+        return drugService.pageOrderByHot(pageNum);
     }
 
     @GetMapping("/drugs/page/{pageNum}/query/{queryStr}")
     @ApiOperation(value = "根据药品名称和适应症模糊搜索")
     public List<Drug> gets(@PathVariable Integer pageNum, @PathVariable String queryStr){
-        LambdaQueryWrapper<Drug> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(Drug::getName, queryStr).or().like(Drug::getIndication, queryStr);
-        return drugService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
+        return drugService.searchOrderByHot(pageNum, queryStr);
     }
 
 }

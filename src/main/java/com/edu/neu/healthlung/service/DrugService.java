@@ -1,7 +1,10 @@
 package com.edu.neu.healthlung.service;
 
+import com.edu.neu.healthlung.entity.Disease;
 import com.edu.neu.healthlung.entity.Drug;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface DrugService extends IService<Drug> {
 
+    List<Drug> pageOrderByHot(Integer pageNum);
+
+    List<Drug> searchOrderByHot(Integer pageNum, String queryStr);
 }

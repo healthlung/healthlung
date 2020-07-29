@@ -46,7 +46,8 @@ public class DiseaseServiceImpl extends ServiceImpl<DiseaseMapper, Disease> impl
      * */
     @Override
     public Disease getById(Serializable id){
-        return (Disease) redisTemplate.opsForHash().get(Constrains.DISEASE_DICT_KEY, id);
+        Disease disease =  (Disease)redisTemplate.opsForHash().get(Constrains.DISEASE_DICT_KEY, id);
+        return disease;
     }
 
     @Override
@@ -56,12 +57,12 @@ public class DiseaseServiceImpl extends ServiceImpl<DiseaseMapper, Disease> impl
 
     @Override
     public List<Disease> listByPinyinOrderByHot(String pinyin) {
-        Set<Object> integerSet = redisTemplate.opsForZSet().range(Constrains.DISEASE_HOT_ZSET_KEY + "_" + pinyin, 0, -1);
+        Set<Object> diseaseSet = redisTemplate.opsForZSet().range(Constrains.DISEASE_HOT_ZSET_KEY + "_" + pinyin, 0, -1);
         List<Disease> result = new ArrayList<>();
 
-        if (integerSet != null) {
-            integerSet.forEach(item -> {
-                result.add(this.getById((Serializable) item));
+        if (diseaseSet != null) {
+            diseaseSet.forEach(item -> {
+                result.add((Disease) item);
             });
         }
         return result;
@@ -69,7 +70,7 @@ public class DiseaseServiceImpl extends ServiceImpl<DiseaseMapper, Disease> impl
 
     @Override
     public List<Disease> searchOrderByHot(Integer pageNum, String queryStr) {
-        Sort sort = Sort.by("favoriteNum").ascending();
+        Sort sort = Sort.by("favoriteNumber").descending();
         Pageable pageable = PageRequest.of(pageNum,defaultPageSize, sort);
         return diseaseRepository.findByNameOrSymptom(queryStr, queryStr, pageable);
     }
@@ -78,7 +79,7 @@ public class DiseaseServiceImpl extends ServiceImpl<DiseaseMapper, Disease> impl
         if(pageNum < 1){
             throw new BadDataException("页码不合法");
         }
-        Set<Object> integerSet = redisTemplate.opsForZSet().range( key,
+        Set<Object> integerSet = redisTemplate.opsForZSet().reverseRange( key,
                 (pageNum - 1) * defaultPageSize,
                 pageNum * defaultPageSize );
 

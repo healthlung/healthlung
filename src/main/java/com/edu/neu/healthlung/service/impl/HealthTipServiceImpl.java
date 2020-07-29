@@ -7,8 +7,6 @@ import com.edu.neu.healthlung.mapper.HealthTipMapper;
 import com.edu.neu.healthlung.service.HealthTipService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.edu.neu.healthlung.util.Constrains;
-import org.elasticsearch.search.sort.SortBuilders;
-import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -76,25 +74,25 @@ public class HealthTipServiceImpl extends ServiceImpl<HealthTipMapper, HealthTip
 
     @Override
     public List<HealthTip> searchOrderByPublishDate(Integer pageNum, String queryStr) {
-        Sort sort = Sort.by("publishDate").ascending();
+        Sort sort = Sort.by("publishDate").descending();
         return searchFromES(pageNum, queryStr, sort);
     }
 
     @Override
     public List<HealthTip> searchOrderByHot(Integer pageNum, String queryStr) {
-        Sort sort = Sort.by("favoriteNum").ascending();
+        Sort sort = Sort.by("favoriteNumber").descending();
         return searchFromES(pageNum, queryStr, sort);
     }
 
     @Override
     public List<HealthTip> searchByModuleOrderByPublishDate(Integer pageNum, String module, String queryStr) {
-        Sort sort = Sort.by("publishDate").ascending();
+        Sort sort = Sort.by("publishDate").descending();
         return searchByModuleFromES(pageNum, queryStr, module, sort);
     }
 
     @Override
     public List<HealthTip> searchByModuleOrderByHot(Integer pageNum, String module, String queryStr) {
-        Sort sort = Sort.by("favoriteNum").ascending();
+        Sort sort = Sort.by("favoriteNumber").descending();
         return searchByModuleFromES(pageNum, queryStr, module, sort);
     }
 
@@ -122,7 +120,7 @@ public class HealthTipServiceImpl extends ServiceImpl<HealthTipMapper, HealthTip
         if(pageNum < 1){
             throw new BadDataException("页码不合法");
         }
-        Set<Object> integerSet = redisTemplate.opsForZSet().range( key,
+        Set<Object> integerSet = redisTemplate.opsForZSet().reverseRange( key,
                 (pageNum - 1) * defaultPageSize,
                 pageNum * defaultPageSize );
 

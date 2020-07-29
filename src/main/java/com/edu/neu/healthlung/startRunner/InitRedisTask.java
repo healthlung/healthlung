@@ -36,6 +36,8 @@ public class InitRedisTask implements ApplicationRunner {
         logger.info("Redis DB healthTip inited");
         diseaseInitializer.init();
         logger.info("Redis DB disease inited");
+        drugInitializer.init();
+        logger.info("Redis DB drug inited");
     }
 
     private void clearDB(){
