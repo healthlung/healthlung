@@ -44,11 +44,12 @@ public class DiseaseController {
     }
 
     @GetMapping("/diseases/page/{pageNum}")
-    @ApiOperation(value = "返回药品列表每页10个")
+    @ApiOperation(value = "返回疾病列表每页10个")
     public List<Disease> gets(@PathVariable Integer pageNum){
-        Page<Disease> page = diseaseService.page(new Page<>(pageNum, defaultPageSize));
-        List<Disease> diseaseList = page.getRecords();
-        return diseaseList;
+        LambdaQueryWrapper<Disease> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Disease::getFavoriteNumber);
+        Page<Disease> page = diseaseService.page(new Page<>(pageNum, defaultPageSize), queryWrapper);
+        return page.getRecords();
     }
 
     @GetMapping("/diseases/page/{pageNum}/query/{queryStr}")

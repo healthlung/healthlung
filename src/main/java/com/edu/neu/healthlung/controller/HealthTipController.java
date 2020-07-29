@@ -45,42 +45,36 @@ public class HealthTipController {
         return healthTipService.pageOrderByPublishDate(pageNum);
     }
 
-    //todo: 从缓存中找
     @GetMapping("/healthTips/hot/page/{pageNum}")
     @ApiOperation(value = "返回贴士列表每页10个, 按照热度排序")
     public List<HealthTip> gets__(@PathVariable Integer pageNum){
         return healthTipService.pageOrderByHot(pageNum);
     }
 
-    //todo: 从缓存中找
     @GetMapping("/healthTips/page/{pageNum}/module/{module}")
     @ApiOperation(value = "返回对应模块下的贴士列表, 按照日期排序")
     public List<HealthTip> gets__(@PathVariable Integer pageNum, @PathVariable String module){
         return healthTipService.pageByModuleOrderByPublishDate(pageNum, module);
     }
 
-    //todo: 从缓存中找
     @GetMapping("/healthTips/hot/page/{pageNum}/module/{module}")
     @ApiOperation(value = "返回对应模块下的贴士列表, 按照热度排序")
     public List<HealthTip> gets_(@PathVariable Integer pageNum, @PathVariable String module){
         return healthTipService.pageByModuleOrderByHot(pageNum, module);
     }
 
-    //todo: 从es中找
     @GetMapping("/healthTips/page/{pageNum}/query/{queryStr}")
     @ApiOperation(value = "根据贴士标题和简单内容模糊搜索, 按照时间排序")
     public List<HealthTip> gets___(@PathVariable Integer pageNum, @PathVariable String queryStr){
         return healthTipService.searchOrderByPublishDate(pageNum, queryStr);
     }
 
-    //todo: 从es中找
     @GetMapping("/healthTips/hot/page/{pageNum}/query/{queryStr}")
     @ApiOperation(value = "根据贴士标题和简单内容模糊搜索，按照热度排序")
     public List<HealthTip> gets____(@PathVariable Integer pageNum, @PathVariable String queryStr){
         return healthTipService.searchOrderByHot(pageNum, queryStr);
     }
 
-    //todo: 从es中找
     @GetMapping("/healthTips/page/{pageNum}/module/{module}/query/{queryStr}")
     @ApiOperation(value = "根据贴士标题和简单内容模糊分模块搜索，按照时间排序")
     public List<HealthTip> gets(@PathVariable Integer pageNum, @PathVariable String queryStr, @PathVariable String module){

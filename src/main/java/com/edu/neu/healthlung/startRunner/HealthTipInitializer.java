@@ -37,8 +37,8 @@ public class HealthTipInitializer implements RedisInitializer {
 
     private void initDict(List<HealthTip> healthTipList) {
         BoundHashOperations<Object, Object, Object> boundHashOps = redisTemplate.boundHashOps(Constrains.HEALTHTIP_DICT_KEY);
-        Map<String, HealthTip> healthTipMap = new HashMap<>();
-        healthTipList.forEach(item-> healthTipMap.put(item.getHealthTipId().toString(), item));
+        Map<Integer, HealthTip> healthTipMap = new HashMap<>();
+        healthTipList.forEach(item-> healthTipMap.put(item.getHealthTipId(), item));
         boundHashOps.putAll(healthTipMap);
     }
 

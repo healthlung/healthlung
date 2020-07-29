@@ -2,10 +2,7 @@ package com.edu.neu.healthlung.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.edu.neu.healthlung.annotation.Auth;
-import com.edu.neu.healthlung.entity.HealthTip;
-import com.edu.neu.healthlung.entity.HealthTipComment;
 import com.edu.neu.healthlung.entity.HealthTipFavorite;
 
 import com.edu.neu.healthlung.exception.DefaultException;
@@ -53,6 +50,7 @@ public class HealthTipFavoriteController {
         return favoriteService.listByUserId(userId, pageNum);
     }
 
+    //todo: 更新缓存
     @PostMapping("/favorite/healthTip/{itemId}")
     @ApiOperation(value = "收藏某个贴士")
     @Auth(needToken = true)
@@ -67,6 +65,7 @@ public class HealthTipFavoriteController {
         return "收藏贴士成功";
     }
 
+    //todo: 更新缓存
     @DeleteMapping("/favorite/healthTip/{healthTipId}")
     @ApiOperation(value = "取消收藏某个贴士")
     @Auth(needToken = true)

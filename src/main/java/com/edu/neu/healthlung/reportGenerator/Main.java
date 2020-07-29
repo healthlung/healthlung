@@ -13,18 +13,18 @@ public class Main {
 
         // 构建一个肺结节数组
         List<LungNode> lungNodes = new ArrayList<>();
-        LungNode l1 = new LungNode();
-        l1.setLevel(LungNode.LungNodeType.实性);
-        l1.setImageUrl("https://i.loli.net/2020/06/23/WYajMlqL32C1FSU.png");
-        l1.setLength(8.0);
-        l1.setWidth(8.0);
-        lungNodes.add(l1);
-        LungNode l2 = new LungNode();
-        l2.setLevel(LungNode.LungNodeType.部分实性);
-        l2.setLength(9.0);
-        l2.setWidth(9.0);
-        l2.setImageUrl("https://i.loli.net/2020/06/23/WYajMlqL32C1FSU.png");
-        lungNodes.add(l2);
+//        LungNode l1 = new LungNode();
+//        l1.setLevel(LungNode.LungNodeType.实性);
+//        l1.setImageUrl("https://i.loli.net/2020/06/23/WYajMlqL32C1FSU.png");
+//        l1.setLength(8.0);
+//        l1.setWidth(8.0);
+//        lungNodes.add(l1);
+//        LungNode l2 = new LungNode();
+//        l2.setLevel(LungNode.LungNodeType.部分实性);
+//        l2.setLength(9.0);
+//        l2.setWidth(9.0);
+//        l2.setImageUrl("https://i.loli.net/2020/06/23/WYajMlqL32C1FSU.png");
+//        lungNodes.add(l2);
 
         //构建医生数组
         Doctor doctor_1 = new Doctor();
