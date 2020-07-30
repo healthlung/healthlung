@@ -2,6 +2,7 @@ package com.edu.neu.healthlung.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.io.Serializable;
 
@@ -51,7 +52,7 @@ public class HealthTipComment implements Serializable {
     @ApiModelProperty(value = "评论日期")
     @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT)
-    private Date createDate;
+    private LocalDate createDate;
 
     @ApiModelProperty(value = "被回复评论ID")
     private Integer lastCommentId;

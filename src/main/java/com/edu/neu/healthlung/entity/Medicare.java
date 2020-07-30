@@ -1,6 +1,8 @@
 package com.edu.neu.healthlung.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+
+import java.time.LocalDate;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
@@ -43,7 +45,7 @@ public class Medicare implements Serializable {
 
     @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     @ApiModelProperty(value = "发布日期")
-    private Date publishDate;
+    private LocalDate publishDate;
 
     @ApiModelProperty(value = "爬虫网址")
     private String spiderUrl;

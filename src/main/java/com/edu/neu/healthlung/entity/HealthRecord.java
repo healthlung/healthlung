@@ -3,6 +3,7 @@ package com.edu.neu.healthlung.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -48,7 +49,7 @@ public class HealthRecord implements Serializable {
     @Past(message = "出生日期字段非法")
     @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     @ApiModelProperty(value = "年龄")
-    private Date birthday;
+    private LocalDate birthday;
 
     @NotNull(message = "是否有慢性肺部疾病字段不能为空")
     @ApiModelProperty(value = "是否有慢性肺部疾病")

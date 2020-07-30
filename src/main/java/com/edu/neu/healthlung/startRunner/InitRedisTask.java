@@ -27,6 +27,9 @@ public class InitRedisTask implements ApplicationRunner {
     DrugInitializer drugInitializer;
 
     @Resource
+    MedicareInitializer medicareInitializer;
+
+    @Resource
     private RedisTemplate<Object, Object> redisTemplate;
 
     @Override
@@ -38,6 +41,8 @@ public class InitRedisTask implements ApplicationRunner {
         logger.info("Redis DB disease inited");
         drugInitializer.init();
         logger.info("Redis DB drug inited");
+        medicareInitializer.init();
+        logger.info("Redis DB medicare inited");
     }
 
     private void clearDB(){

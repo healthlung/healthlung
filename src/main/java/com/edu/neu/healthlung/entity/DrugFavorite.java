@@ -2,6 +2,7 @@ package com.edu.neu.healthlung.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.io.Serializable;
 
@@ -40,7 +41,7 @@ public class DrugFavorite implements Serializable {
     @ApiModelProperty(value = "收藏日期")
     @TableField(fill = FieldFill.INSERT)
     @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
-    private Date createDate;
+    private LocalDate createDate;
 
     @ApiModelProperty(value = "药品ID")
     @NotNull(message = "药品ID字段不能为空")
