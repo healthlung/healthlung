@@ -3,7 +3,6 @@ package com.edu.neu.healthlung.elasticsearchRepository;
 import com.edu.neu.healthlung.entity.HealthTip;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

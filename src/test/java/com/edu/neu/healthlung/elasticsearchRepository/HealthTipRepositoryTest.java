@@ -30,21 +30,17 @@ class HealthTipRepositoryTest extends HealthlungApplicationTests {
     }
 
     @Test
+    void testSearch(){
+        List<HealthTip> healthTipList = healthTipService.searchOrderByPublishDate(1, "太极");
+        healthTipList.forEach(item -> {
+            System.out.println(item.getTitle());
+        });
+    }
+
+    @Test
     void testSaveAll() {
         List<HealthTip> healthTipList = healthTipService.list();
         healthTipRepository.saveAll(healthTipList);
     }
 
-    @Test
-    void testSaveAll2() {
-
-        int pageNum = 1;
-        int defaultPageSize = 10;
-        LambdaQueryWrapper<HealthTip> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.orderByDesc(HealthTip::getFavoriteNumber);
-        List<HealthTip> healthTipList = healthTipService.page(new Page<>(pageNum, defaultPageSize), queryWrapper).getRecords();
-        healthTipRepository.saveAll(healthTipList);
-        Iterable<HealthTip> all = healthTipRepository.findAll();
-        all.forEach(System.out::println);
-    }
 }

@@ -97,7 +97,7 @@ public class HealthTipServiceImpl extends ServiceImpl<HealthTipMapper, HealthTip
     }
 
     private List<HealthTip> searchFromES(Integer pageNum, String queryStr, Sort sort) {
-        Pageable pageable = PageRequest.of(pageNum,defaultPageSize, sort);
+        Pageable pageable = PageRequest.of(pageNum - 1,defaultPageSize, sort);
         return healthTipRepository.findBySimpleContentOrTitle(queryStr, queryStr, pageable);
     }
 

@@ -26,12 +26,13 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="疾病")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Document(indexName = "healthlung", type = "disease", replicas = 0)
+@Document(indexName = "disease", type = "disease", replicas = 0)
 public class Disease implements Serializable {
 
     private static final long serialVersionUID=1L;
 
     @Id
+    @Field(type = FieldType.Integer)
     @ApiModelProperty(value = "疾病ID")
     @TableId(value = "disease_id", type = IdType.AUTO)
     private Integer diseaseId;

@@ -7,14 +7,31 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
+  data:
+    elasticsearch:
+      properties:
+        index:
+          search:
+            slowlog:
+              threshold:
+                query:
+                  info: 1ms
+
 
 logging:
   level:
     root: INFO
+    org:
+      elasticsearch:
+        index:
+          search:
+            slowlog:
+              query: INFO
     com:
       edu:
         neu:
           healthlung: INFO
+
   file:
     name: healthlung.log
 

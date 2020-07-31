@@ -71,7 +71,7 @@ public class DiseaseServiceImpl extends ServiceImpl<DiseaseMapper, Disease> impl
     @Override
     public List<Disease> searchOrderByHot(Integer pageNum, String queryStr) {
         Sort sort = Sort.by("favoriteNumber").descending();
-        Pageable pageable = PageRequest.of(pageNum,defaultPageSize, sort);
+        Pageable pageable = PageRequest.of(pageNum - 1,defaultPageSize, sort);
         return diseaseRepository.findByNameOrSymptom(queryStr, queryStr, pageable);
     }
 

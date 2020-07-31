@@ -11,8 +11,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
-@Component
-@Order(1)
+//todo: 加回来
+//@Component
+//@Order(1)
 public class InitRedisTask implements ApplicationRunner {
 
     Logger logger = LoggerFactory.getLogger(InitRedisTask.class);

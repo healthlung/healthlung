@@ -57,9 +57,8 @@ public class DrugServiceImpl extends ServiceImpl<DrugMapper, Drug> implements Dr
     @Override
     public List<Drug> searchOrderByHot(Integer pageNum, String queryStr) {
         Sort sort = Sort.by("favoriteNumber").descending();
-        Pageable pageable = PageRequest.of(pageNum,defaultPageSize, sort);
-        List<Drug> drugList = drugRepository.findByNameOrIndication(queryStr, queryStr, pageable);
-        return drugList;
+        Pageable pageable = PageRequest.of(pageNum - 1,defaultPageSize, sort);
+        return drugRepository.findByNameOrIndication(queryStr, queryStr, pageable);
     }
 
     private List<Drug> pageFromRedis(Integer pageNum, String key){
