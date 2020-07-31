@@ -13,8 +13,10 @@ import com.edu.neu.healthlung.service.DiseaseFavoriteService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.edu.neu.healthlung.service.DiseaseService;
 import com.edu.neu.healthlung.service.UserService;
+import com.edu.neu.healthlung.util.Constrains;
 import com.edu.neu.healthlung.util.ParamHolder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -35,6 +37,9 @@ public class DiseaseFavoriteServiceImpl extends ServiceImpl<DiseaseFavoriteMappe
     private Integer defaultPageSize;
 
     @Resource
+    RedisTemplate<Object, Object> redisTemplate;
+
+    @Resource
     DiseaseService diseaseService;
 
     @Resource
@@ -46,6 +51,7 @@ public class DiseaseFavoriteServiceImpl extends ServiceImpl<DiseaseFavoriteMappe
         return super.getOne(queryWrapper) != null;
     }
 
+    //todo: 更新缓存
     @Override
     public boolean save(DiseaseFavorite diseaseFavorite) {
 
@@ -70,9 +76,14 @@ public class DiseaseFavoriteServiceImpl extends ServiceImpl<DiseaseFavoriteMappe
             throw new DefaultException("收藏疾病失败");
         }
 
-        return super.save(diseaseFavorite);
+        boolean result = super.save(diseaseFavorite);
+
+        updateRedis(disease, 1);
+
+        return result;
     }
 
+    //todo: 更新缓存
     @Override
     public boolean removeByIdWithCheck(Integer itemId) {
 
@@ -101,7 +112,11 @@ public class DiseaseFavoriteServiceImpl extends ServiceImpl<DiseaseFavoriteMappe
             throw new DefaultException("取消收藏失败");
         }
 
-        return super.removeById(dbItem.getDiseaseFavoriteId());
+        boolean result =  super.removeById(dbItem.getDiseaseFavoriteId());
+
+        updateRedis(disease, -1);
+
+        return result;
     }
 
     @Override
@@ -119,5 +134,12 @@ public class DiseaseFavoriteServiceImpl extends ServiceImpl<DiseaseFavoriteMappe
         }
 
         return diseaseFavorites;
+    }
+
+    private void updateRedis(Disease disease, double scoreAdd){
+
+        redisTemplate.opsForHash().put(Constrains.DISEASE_DICT_KEY, disease.getDiseaseId(), disease);
+
+        redisTemplate.opsForZSet().incrementScore(Constrains.DISEASE_HOT_ZSET_KEY, disease.getDiseaseId(), scoreAdd);
     }
 }

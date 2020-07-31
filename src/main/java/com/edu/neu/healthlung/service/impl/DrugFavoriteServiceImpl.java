@@ -12,8 +12,10 @@ import com.edu.neu.healthlung.service.DrugFavoriteService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.edu.neu.healthlung.service.DrugService;
 import com.edu.neu.healthlung.service.UserService;
+import com.edu.neu.healthlung.util.Constrains;
 import com.edu.neu.healthlung.util.ParamHolder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -35,6 +37,9 @@ public class DrugFavoriteServiceImpl extends ServiceImpl<DrugFavoriteMapper, Dru
 
     @Resource
     UserService userService;
+
+    @Resource
+    RedisTemplate<Object, Object> redisTemplate;
 
     @Value("${healthlung.default-page-size}")
     private Integer defaultPageSize;
@@ -69,7 +74,11 @@ public class DrugFavoriteServiceImpl extends ServiceImpl<DrugFavoriteMapper, Dru
             throw new DefaultException("收藏药品失败");
         }
 
-        return super.save(entity);
+        boolean result = super.save(entity);
+
+        updateRedis(drug, -1);
+
+        return result;
     }
 
     @Override
@@ -100,7 +109,11 @@ public class DrugFavoriteServiceImpl extends ServiceImpl<DrugFavoriteMapper, Dru
             throw new DefaultException("取消收藏药品失败");
         }
 
-        return super.removeById(dbItem.getDrugFavoriteId());
+        boolean result = super.removeById(dbItem.getDrugFavoriteId());
+
+        updateRedis(drug, -1);
+
+        return result;
     }
 
     @Override
@@ -118,6 +131,13 @@ public class DrugFavoriteServiceImpl extends ServiceImpl<DrugFavoriteMapper, Dru
         }
 
         return favoriteList;
+    }
+
+    private void updateRedis(Drug drug, double scoreAdd){
+
+        redisTemplate.opsForHash().put(Constrains.DRUG_DICT_KEY, drug.getDrugId(), drug);
+
+        redisTemplate.opsForZSet().incrementScore(Constrains.DRUG_HOT_ZSET_KEY, drug.getDrugId(), scoreAdd);
     }
 
 }

@@ -13,7 +13,7 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         // 使用now()填充更新favoriteDate字段
-        this.setFieldValByName("createDate", new Date(System.currentTimeMillis()), metaObject);
+        this.setFieldValByName("createDate", LocalDate.now(), metaObject);
     }
 
     @Override

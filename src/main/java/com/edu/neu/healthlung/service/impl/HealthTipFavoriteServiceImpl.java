@@ -12,8 +12,10 @@ import com.edu.neu.healthlung.service.HealthTipFavoriteService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.edu.neu.healthlung.service.HealthTipService;
 import com.edu.neu.healthlung.service.UserService;
+import com.edu.neu.healthlung.util.Constrains;
 import com.edu.neu.healthlung.util.ParamHolder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -35,6 +37,9 @@ public class HealthTipFavoriteServiceImpl extends ServiceImpl<HealthTipFavoriteM
 
     @Resource
     UserService userService;
+
+    @Resource
+    RedisTemplate<Object, Object> redisTemplate;
 
     @Value("${healthlung.default-page-size}")
     private Integer defaultPageSize;
@@ -68,7 +73,11 @@ public class HealthTipFavoriteServiceImpl extends ServiceImpl<HealthTipFavoriteM
             throw new DefaultException("点赞失败");
         }
 
-        return super.save(entity);
+        boolean result = super.save(entity);
+
+        updateRedis(healthTip, 1);
+
+        return result;
     }
 
     @Override
@@ -98,7 +107,11 @@ public class HealthTipFavoriteServiceImpl extends ServiceImpl<HealthTipFavoriteM
             throw new DefaultException("取消点赞失败");
         }
 
-        return super.removeById(dbItem.getHealthTipFavoriteId());
+        boolean result = super.removeById(dbItem.getHealthTipFavoriteId());
+
+        updateRedis(healthTip, -1);
+
+        return result;
     }
 
     @Override
@@ -116,5 +129,12 @@ public class HealthTipFavoriteServiceImpl extends ServiceImpl<HealthTipFavoriteM
         }
 
         return favoriteList;
+    }
+
+    private void updateRedis(HealthTip healthTip, double scoreAdd){
+
+        redisTemplate.opsForHash().put(Constrains.HEALTHTIP_DICT_KEY, healthTip.getHealthTipId(), healthTip);
+
+        redisTemplate.opsForZSet().incrementScore(Constrains.HEALTHTIP_HOT_ZSET_KEY, healthTip.getHealthTipId(), scoreAdd);
     }
 }

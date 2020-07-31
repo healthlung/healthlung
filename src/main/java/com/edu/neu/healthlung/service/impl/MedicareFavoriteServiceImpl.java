@@ -12,8 +12,10 @@ import com.edu.neu.healthlung.service.MedicareFavoriteService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.edu.neu.healthlung.service.MedicareService;
 import com.edu.neu.healthlung.service.UserService;
+import com.edu.neu.healthlung.util.Constrains;
 import com.edu.neu.healthlung.util.ParamHolder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -38,6 +40,9 @@ public class MedicareFavoriteServiceImpl extends ServiceImpl<MedicareFavoriteMap
 
     @Value("${healthlung.default-page-size}")
     private Integer defaultPageSize;
+
+    @Resource
+    RedisTemplate<Object, Object> redisTemplate;
 
     private boolean exist(MedicareFavorite entity){
         LambdaQueryWrapper<MedicareFavorite> queryWrapper = new LambdaQueryWrapper<>();
@@ -68,7 +73,11 @@ public class MedicareFavoriteServiceImpl extends ServiceImpl<MedicareFavoriteMap
             throw new DefaultException("收藏医保失败");
         }
 
-        return super.save(entity);
+        boolean result = super.save(entity);
+
+        updateRedis(medicare, 1);
+
+        return result;
     }
 
 
@@ -114,6 +123,17 @@ public class MedicareFavoriteServiceImpl extends ServiceImpl<MedicareFavoriteMap
             throw new DefaultException("取消收藏医保失败");
         }
 
-        return super.removeById(dbItem.getMedicareFavoriteId());
+        boolean result = super.removeById(dbItem.getMedicareFavoriteId());
+
+        updateRedis(medicare, -1);
+
+        return result;
+    }
+
+    private void updateRedis(Medicare medicare, double scoreAdd){
+
+        redisTemplate.opsForHash().put(Constrains.MEDICARE_DICT_KEY, medicare.getMedicareId(), medicare);
+
+        redisTemplate.opsForZSet().incrementScore(Constrains.MEDICARE_HOT_ZSET_KEY, medicare.getMedicareId(), scoreAdd);
     }
 }
